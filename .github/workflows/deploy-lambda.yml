@@ -1,0 +1,39 @@
+name: 🚀 Deploy Lambda on Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-lambda:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🧱 Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🛠 Build Lambda
+        run: |
+          npm run build:lambda
+          cd lambdas/handleSubmission/dist
+          zip lambda.zip index.js
+
+      - name: 🚀 Deploy to AWS Lambda
+        uses: aws-actions/aws-cli-action@v1.1.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          inline: |
+            aws lambda update-function-code \
+              --function-name ${{ secrets.LAMBDA_NAME }} \
+              --zip-file fileb://lambdas/handleSubmission/dist/lambda.zip
