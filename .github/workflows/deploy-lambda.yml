@@ -2,8 +2,7 @@ name: 🚀 Deploy Lambda on Push
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy-lambda:
@@ -27,13 +26,19 @@ jobs:
           cd lambdas/handleSubmission/dist
           zip lambda.zip index.js
 
+      - name: 📥 Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
       - name: 🚀 Deploy to AWS Lambda
-        uses: aws-actions/aws-cli-action@v1.1.0
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          inline: |
-            aws lambda update-function-code \
-              --function-name ${{ secrets.LAMBDA_NAME }} \
-              --zip-file fileb://lambdas/handleSubmission/dist/lambda.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ secrets.LAMBDA_NAME }} \
+            --zip-file fileb://lambdas/handleSubmission/dist/lambda.zip \
+            --region $AWS_REGION
