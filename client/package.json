@@ -12,10 +12,12 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.3",
     "@tanstack/react-query": "^5.73.3",
+    "antd": "^5.24.6",
     "leetcode-query": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.1.3"
+    "tailwindcss": "^4.1.3",
+    "title-case": "^4.3.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

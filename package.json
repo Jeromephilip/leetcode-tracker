@@ -6,6 +6,7 @@
     "lambda:all": "npm run build:lambda && npm run zip:lambda && npm run deploy:lambda"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.149",
     "esbuild": "^0.25.2"
   }
 }

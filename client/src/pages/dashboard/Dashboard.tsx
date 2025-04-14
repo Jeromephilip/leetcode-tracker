@@ -1,19 +1,40 @@
 import { RecentSubmissionsCard } from "./components/card/RecentSubmissionsCard";
 import { TasksCard } from "./components/card/TasksCard";
 import { useLeetcodeUserDetails } from "./hooks/useLeetcodeDetails";
+import { useDueReviews } from "./hooks/useDueReviews";
+import { Flex, Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
+
 
 const Dashboard = () => {
   const { data, isLoading } = useLeetcodeUserDetails("jerodahero");
+
+  const { data: reviewData, isLoading: isReviewLoading } = useDueReviews();
+
+  const tasks =
+    reviewData?.dueProblems.map(({ problemId, previouslySolvedAt }) => ({
+      title: problemId.replace(/-/g, " "),
+      description: `Previously solved on ${new Date(
+        previouslySolvedAt
+      ).toLocaleDateString()}.`,
+    })) ?? [];
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">📊 LeetCode Tracker</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <RecentSubmissionsCard data={data} isLoading={isLoading} />
-          {/* Change this to add data from lambda */}
-          <TasksCard data={data} isLoading={true} /> 
-        </div>
+        {isLoading || isReviewLoading ? (
+          <div className="flex justify-center items-center min-h-[50vh]">
+            <Flex align="center">
+              <Spin indicator={<LoadingOutlined spin />} size="large" />
+            </Flex>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <RecentSubmissionsCard data={data} isLoading={isLoading} />
+            <TasksCard data={{ todayTasks: tasks }} isLoading={false} />
+          </div>
+        )}
       </div>
     </div>
   );

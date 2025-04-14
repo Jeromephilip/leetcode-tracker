@@ -18,8 +18,8 @@ export const RecentSubmissionsCard = ({
     >
       {data?.recentSubmissionList
         ?.filter((submission) => submission.statusDisplay === "Accepted")
-        .map((submission) => (
-          <div key={submission.title} className="mb-4">
+        .map((submission, index) => (
+          <div key={`submission-${submission.title}-${index}`} className="mb-4">
             <p className="font-semibold">{submission.title}</p>
             <p className="text-gray-500">{submission.statusDisplay}</p>
           </div>

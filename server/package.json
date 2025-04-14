@@ -1,8 +1,10 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "leetcode-query": "^2.0.0"
+    "leetcode-query": "^2.0.0",
+    "node-fetch": "^3.3.2"
   },
   "scripts": {
     "dev": "ts-node server.ts"
