@@ -18,6 +18,7 @@ export const handler = async (event: any) => {
       problemId,
       solvedAt: now.toISOString(),
       reviewSchedule,
+      'test': 'test'
     }),
   };
 };
