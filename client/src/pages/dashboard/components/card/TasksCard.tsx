@@ -1,5 +1,4 @@
 import { Card } from './Card';
-import { UserProfile } from "leetcode-query";
 
 interface TasksCardProps {
   data?: any;
