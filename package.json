@@ -3,7 +3,7 @@
     "build:lambda": "esbuild lambdas/handleSubmission/index.ts --bundle --platform=node --target=node18 --outfile=lambdas/handleSubmission/dist/index.js",
     "zip:lambda": "cd lambdas/handleSubmission/dist && zip -r lambda.zip index.js",
     "deploy:lambda": "aws lambda update-function-code --function-name handleLeetCodeSubmission --zip-file fileb://lambdas/handleSubmission/dist/lambda.zip --region us-east-2",
-    "lambda:all": "npm run build:lambda && npm run zip:lambda && npm run deploy:lambda"
+    "lambda:all": "npm run build:lambda && npm run zip:lambda && npm run deploy:lambda",
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.149",
