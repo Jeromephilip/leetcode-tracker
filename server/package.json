@@ -13,7 +13,7 @@
     "sequelize": "^6.37.7"
   },
   "scripts": {
-    "dev": "ts-node server.ts",
+    "dev": "ts-node index.ts",
     "seed": "tsx scripts/seed.ts",
     "reset": "tsx scripts/reset.ts"
   },
