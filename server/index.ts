@@ -1,5 +1,6 @@
 import server from './server';
 import { sequelize } from './db/sequelize';
+import type {} from './types/express';
 
 const PORT = 4000;
 

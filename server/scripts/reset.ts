@@ -8,10 +8,12 @@ const reset = async () => {
 
     console.log('Dropping all tables...');
     await sequelize.drop();
-
+    console.log('Registered models:', sequelize.models);
+    
     console.log('Recreating tables...');
-    await sequelize.sync();
+    await sequelize.sync({ alter: true });
 
+    
     console.log('Seeding data...');
     const hashedPassword = await bcrypt.hash('test123', 10);
 
