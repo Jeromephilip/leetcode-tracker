@@ -89,7 +89,7 @@ export const markReviewed: RequestHandler = async (req, res) => {
 
   try {
     const task = await ReviewTask.findOne({
-      where: { id, userId: username },
+      where: { id, username },
     });
 
     if (!task) {
@@ -111,7 +111,7 @@ export const markReviewed: RequestHandler = async (req, res) => {
 const filterReviewedTasks = async (username: string, data: Submission[]) => {
   const tasks = await ReviewTask.findAll({
     where: {
-      userId: username,
+      username,
       reviewed: false,
     },
   });

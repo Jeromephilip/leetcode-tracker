@@ -8,7 +8,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    userId: {
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
     },

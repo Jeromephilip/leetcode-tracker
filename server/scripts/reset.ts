@@ -1,6 +1,6 @@
 import { sequelize } from '../db/sequelize';
-import { User } from '../models/User';
-import bcrypt from 'bcrypt';
+import '../models/User';
+import '../models/ReviewTask';
 
 const reset = async () => {
   try {
@@ -8,21 +8,11 @@ const reset = async () => {
 
     console.log('Dropping all tables...');
     await sequelize.drop();
-    console.log('Registered models:', sequelize.models);
-    
+
     console.log('Recreating tables...');
     await sequelize.sync({ alter: true });
 
-    
-    console.log('Seeding data...');
-    const hashedPassword = await bcrypt.hash('test123', 10);
-
-    await User.create({
-      username: 'jerodahero',
-      password: hashedPassword,
-    });
-
-    console.log('DB reset and seeded with jerodahero (password: test123)');
+    console.log('Tables reset complete. Current tables:', Object.keys(sequelize.models));
     process.exit(0);
   } catch (err) {
     console.error('Failed to reset DB:', err);

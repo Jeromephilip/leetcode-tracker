@@ -23,19 +23,19 @@ describe("GET /api/reviews/due", () => {
 
     await ReviewTask.bulkCreate([
       {
-        userId: "jerodahero",
+        username: "jerodahero",
         problemId: "Graph Valid Tree",
         reviewDate: today,
         reviewed: false,
       },
       {
-        userId: "jerodahero",
+        username: "jerodahero",
         problemId: "Number of Connected Components in an Undirected Graph",
         reviewDate: today,
         reviewed: false,
       },
       {
-        userId: "jerodahero",
+        username: "jerodahero",
         problemId: "Some Other Problem",
         reviewDate: today,
         reviewed: true,

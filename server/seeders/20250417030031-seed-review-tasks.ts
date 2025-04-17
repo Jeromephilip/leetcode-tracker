@@ -3,7 +3,7 @@ import { QueryInterface } from "sequelize";
 export async function up(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.bulkInsert('review_tasks', [
     {
-      userId: 'jerodahero',
+      username: 'jerodahero',
       problemId: 'Graph Valid Tree',
       reviewDate: '2025-04-10',
       reviewed: false,
@@ -11,7 +11,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       updatedAt: new Date(),
     },
     {
-      userId: 'jerodahero',
+      username: 'jerodahero',
       problemId: 'Number of Connected Components in an Undirected Graph',
       reviewDate: '2025-04-10',
       reviewed: false,
@@ -19,7 +19,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       updatedAt: new Date(),
     },
     {
-      userId: 'jerodahero',
+      username: 'jerodahero',
       problemId: 'Number of Connected Components in an Undirected Graph',
       reviewDate: '2025-04-10',
       reviewed: true,
@@ -31,7 +31,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
 
 export async function down(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.bulkDelete('review_tasks', {
-    userId: 'jerodahero',
+    username: 'jerodahero',
   });
 }
 

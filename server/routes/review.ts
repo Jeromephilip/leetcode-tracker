@@ -2,9 +2,9 @@ import express from "express";
 import {
   userHandler,
   dueReviewHandler,
-} from "../controllers/reviewController";
+} from "../controllers/review";
 import { jwtMiddleware } from "../middleware/jwtAuth";
-import { markReviewed } from "../controllers/reviewController";
+import { markReviewed } from "../controllers/review";
 
 const router = express.Router();
 

@@ -3,7 +3,7 @@ import { sequelize } from '../db/sequelize';
 
 interface ReviewTaskAttributes {
   id?: number;
-  userId: string;
+  username: string;
   problemId: string;
   reviewDate: Date;
   reviewed: boolean;
@@ -11,7 +11,7 @@ interface ReviewTaskAttributes {
 
 export class ReviewTask extends Model<ReviewTaskAttributes> implements ReviewTaskAttributes {
   id!: number;
-  userId!: string;
+  username!: string;
   problemId!: string;
   reviewDate!: Date;
   reviewed!: boolean;
@@ -24,7 +24,7 @@ ReviewTask.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    userId: {
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
     },
