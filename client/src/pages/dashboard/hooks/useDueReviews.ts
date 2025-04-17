@@ -1,14 +1,7 @@
-// src/hooks/useDueReviews.ts
 import { useQuery } from '@tanstack/react-query';
+import { ReviewTask } from '../components/card/TasksCard';
 
-type ReviewResponse = {
-  dueProblems: {
-    problemId: string;
-    previouslySolvedAt: string;
-  }[];
-};
-
-const fetchDueReviews = async (): Promise<ReviewResponse> => {
+const fetchDueReviews = async (): Promise<ReviewTask[]> => {
   const res = await fetch('http://localhost:4000/api/reviews/due', {
     method: 'GET',
     credentials: 'include'
@@ -19,7 +12,7 @@ const fetchDueReviews = async (): Promise<ReviewResponse> => {
 };
 
 export const useDueReviews = () => {
-  return useQuery<ReviewResponse>({
+  return useQuery<ReviewTask[]>({
     queryKey: ['dueReviews'],
     queryFn: fetchDueReviews,
   });

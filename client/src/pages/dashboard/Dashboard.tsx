@@ -9,15 +9,9 @@ import { LoadingOutlined } from '@ant-design/icons';
 const Dashboard = () => {
   const { data, isLoading } = useLeetcodeUserDetails("jerodahero");
 
-  const { data: reviewData, isLoading: isReviewLoading } = useDueReviews();
+  const { data: tasks, isLoading: isReviewLoading } = useDueReviews();
 
-  const tasks =
-    reviewData?.dueProblems.map(({ problemId, previouslySolvedAt }) => ({
-      title: problemId.replace(/-/g, " "),
-      description: `Previously solved on ${new Date(
-        previouslySolvedAt
-      ).toLocaleDateString()}.`,
-    })) ?? [];
+  console.log(tasks);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -32,7 +26,7 @@ const Dashboard = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <RecentSubmissionsCard data={data} isLoading={isLoading} />
-            <TasksCard data={{ todayTasks: tasks }} isLoading={false} />
+            <TasksCard data={tasks} isLoading={isReviewLoading} />
           </div>
         )}
       </div>
