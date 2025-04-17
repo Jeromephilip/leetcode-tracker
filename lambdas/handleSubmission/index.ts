@@ -9,7 +9,7 @@ const reviewIntervals = [1, 3, 7, 14, 30];
 
 const getReviewsDueToday = (
   submissions: Submission[]
-): { problemId: string; previouslySolvedAt: string }[] => {
+): Submission[] => {
   const today = new Date().toISOString().split("T")[0];
   console.log(`Today is: ${today}`);
 
@@ -26,7 +26,7 @@ const getReviewsDueToday = (
       console.log(`Review dates for ${solvedAt}: ${reviewDates.join(", ")}`);
       return reviewDates.includes(today);
     })
-    .map((s) => ({ problemId: s.problemId, previouslySolvedAt: s.solvedAt }));
+    .map((s) => ({ problemId: s.problemId, solvedAt: s.solvedAt }));
 };
 
 export const handler = async (

@@ -1,4 +1,6 @@
 {
+  "name": "leetcode-tracker",
+  "version": "1.0.0",
   "scripts": {
     "build:lambda": "esbuild lambdas/handleSubmission/index.ts --bundle --platform=node --target=node18 --outfile=lambdas/handleSubmission/dist/index.js",
     "zip:lambda": "cd lambdas/handleSubmission/dist && zip -r lambda.zip index.js",
