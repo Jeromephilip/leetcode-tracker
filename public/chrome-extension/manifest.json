@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "LeetCode Tracker",
+  "version": "1.0",
+  "description": "Link your LeetCode account to the LeetCode Tracker app",
+  "permissions": [
+    "cookies",
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://leetcode.com/*",
+    "http://localhost:3000/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "LeetCode Tracker"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://leetcode.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}

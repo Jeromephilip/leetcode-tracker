@@ -30,3 +30,84 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore database files
+*.sqlite3
+*.sqlite3-*
+*.db
+
+# Ignore dependencies
+/vendor/bundle
+/node_modules
+/yarn-error.log
+
+# Ignore coverage reports
+/coverage
+/.simplecov
+
+# Ignore Spring files
+/spring
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Ignore backup files
+*.bak
+*.backup
+*.orig
+
+# Ignore cache files
+.cache/
+.sass-cache/
+
+# Ignore test artifacts
+/test/tmp/
+/test/version_tmp/
+
+# Ignore public assets that are compiled
+/public/assets
+/public/packs
+/public/packs-test
+
+# Ignore npm/yarn lock files (if you want to ignore them)
+# package-lock.json
+# yarn.lock
+
+# Ignore local configuration files
+# config/database.yml  # Uncomment if you have sensitive database credentials
+config/application.yml
+config/secrets.yml
+
+# Ignore uploaded files in development
+/public/uploads
+
+# Ignore any local gems
+*.gem
+*.rbc
+
+# Ignore RVM files
+.rvmrc
+
+# Ignore rbenv files
+.ruby-version
+.ruby-gemset
+
+# Ignore bundler files
+Gemfile.lock
+.bundle/
+
+# Ignore byebug command history file
+.byebug_history
+
+# Ignore dotenv files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
