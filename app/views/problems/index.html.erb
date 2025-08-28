@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solved Problems - <%= @user.leetcode_username %></title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px 30px;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .navbar-brand {
+      color: white;
+      font-size: 1.5em;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    
+    .navbar-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .navbar-link {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    
+    .navbar-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .navbar-link.active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: #f8f9fa;
+      padding: 30px;
+      text-align: center;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      font-weight: 300;
+      color: #333;
+    }
+    
+    .header p {
+      margin: 10px 0 0 0;
+      color: #6c757d;
+      font-size: 1.1em;
+    }
+    
+    .stats-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      padding: 20px 30px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-number {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: #6c757d;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .content {
+      padding: 30px;
+    }
+    
+    .section-title {
+      font-size: 1.5em;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+    
+    .problems-grid {
+      display: grid;
+      gap: 16px;
+    }
+    
+    .problem-card {
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      border-left: 4px solid #28a745;
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .problem-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .problem-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .problem-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #333;
+      text-decoration: none;
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .problem-title:hover {
+      color: #667eea;
+    }
+    
+    .difficulty-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75em;
+      font-weight: 600;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    
+    .difficulty-easy {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .difficulty-medium {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    
+    .difficulty-hard {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .problem-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: #6c757d;
+      font-size: 0.9em;
+      margin-bottom: 15px;
+    }
+    
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8f9fa;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .notes-section {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+    
+    .notes-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .notes-content {
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6c757d;
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .sync-button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.2s;
+    }
+    
+    .sync-button:hover {
+      background: #5a6fd8;
+    }
+    
+    .search-section {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .search-box {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.2s;
+    }
+    
+    .clear-filters-btn {
+      padding: 12px 16px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    
+    .clear-filters-btn:hover {
+      background: #c82333;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 8px 16px;
+      border: 2px solid #e9ecef;
+      background: white;
+      color: #6c757d;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+      border-color: #667eea;
+      color: #667eea;
+    }
+    
+    .filter-btn.active {
+      background: #667eea;
+      border-color: #667eea;
+      color: white;
+    }
+    
+    .problems-grid {
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    
+    .problems-grid::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .problems-grid::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    .problems-grid::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 4px;
+    }
+    
+    .problems-grid::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+    
+    .problem-card.hidden {
+      display: none;
+    }
+    
+    .algorithm-filters {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .algorithm-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .algo-filter-btn {
+      padding: 6px 12px;
+      border: 1px solid #dee2e6;
+      background: white;
+      color: #495057;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 0.8em;
+      transition: all 0.2s;
+    }
+    
+    .algo-filter-btn:hover {
+      border-color: #667eea;
+      color: #667eea;
+      background: #f8f9ff;
+    }
+    
+    .algo-filter-btn.active {
+      background: #667eea;
+      border-color: #667eea;
+      color: white;
+    }
+    
+    .algo-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    
+    .algo-tag {
+      padding: 4px 8px;
+      background: #e9ecef;
+      color: #495057;
+      border-radius: 12px;
+      font-size: 0.75em;
+      border: 1px solid #dee2e6;
+    }
+    
+    .filter-btn.selected {
+      background: #667eea;
+      border-color: #667eea;
+      color: white;
+    }
+    
+    .algo-filter-btn.selected {
+      background: #667eea;
+      border-color: #667eea;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-content">
+      <a href="/dashboard" class="navbar-brand">🚀 LeetCode Tracker</a>
+      <div class="navbar-links">
+        <a href="/dashboard" class="navbar-link">📊 Dashboard</a>
+        <a href="/problems" class="navbar-link active">📝 Problems</a>
+        <a href="/logout" class="navbar-link">🚪 Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>📝 Solved Problems</h1>
+      <p>Track your progress and add notes to your solved problems</p>
+    </div>
+    
+    <div class="stats-summary">
+      <div class="stat-item">
+        <div class="stat-number"><%= @solved_problems.length %></div>
+        <div class="stat-label">Total Solved</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= @solved_problems.count { |p| p[:difficulty] == 'Easy' } %></div>
+        <div class="stat-label">Easy</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= @solved_problems.count { |p| p[:difficulty] == 'Medium' } %></div>
+        <div class="stat-label">Medium</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= @solved_problems.count { |p| p[:difficulty] == 'Hard' } %></div>
+        <div class="stat-label">Hard</div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="section-title">
+        📚 Your Solved Problems
+        <button class="sync-button" onclick="syncProblems()">🔄 Sync</button>
+      </div>
+      
+      <div style="margin-bottom: 20px; padding: 15px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #007bff;">
+        <p style="margin: 0; color: #004085; font-size: 0.9em;">
+          💡 <strong>Note:</strong> This page shows all problems you've solved on LeetCode. 
+          <br>📊 Data is synced from your LeetCode account. Click "Sync" to refresh.
+        </p>
+      </div>
+      
+              <!-- Search and Filter Section -->
+        <div class="search-section">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search problems..." class="search-input">
+            <button id="clearFilters" class="clear-filters-btn">🗑️ Clear All Filters</button>
+          </div>
+          
+
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all">All (<span id="allCount"><%= @solved_problems.length %></span>)</button>
+          <button class="filter-btn" data-filter="Easy">Easy (<span id="easyCount"><%= @solved_problems.count { |p| p[:difficulty] == 'Easy' } %></span>)</button>
+          <button class="filter-btn" data-filter="Medium">Medium (<span id="mediumCount"><%= @solved_problems.count { |p| p[:difficulty] == 'Medium' } %></span>)</button>
+          <button class="filter-btn" data-filter="Hard">Hard (<span id="hardCount"><%= @solved_problems.count { |p| p[:difficulty] == 'Hard' } %></span>)</button>
+        </div>
+        
+        <!-- Algorithm Filter Section -->
+        <div class="algorithm-filters">
+          <h4 style="margin: 15px 0 10px 0; color: #333;">Algorithm Types (Click multiple to combine):</h4>
+          <div class="algorithm-buttons">
+            <button class="algo-filter-btn active" data-algorithm="all">
+              Show All (<span class="algo-count"><%= @solved_problems.length %></span>)
+            </button>
+            <% 
+              all_algorithms = @solved_problems.flat_map { |p| p[:algorithms] || [] }.uniq.sort
+              all_algorithms.each do |algo|
+                count = @solved_problems.count { |p| (p[:algorithms] || []).include?(algo) }
+            %>
+              <button class="algo-filter-btn" data-algorithm="<%= algo %>">
+                <%= algo %> (<span class="algo-count"><%= count %></span>)
+              </button>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <% if @solved_problems.any? %>
+        <div class="problems-grid">
+          <% @solved_problems.each do |problem| %>
+            <div class="problem-card">
+              <div class="problem-header">
+                <a href="<%= problem[:url] %>" target="_blank" class="problem-title">
+                  <%= problem[:title] %>
+                </a>
+                <span class="difficulty-badge difficulty-<%= problem[:difficulty]&.downcase %>" data-difficulty="<%= problem[:difficulty] || 'Unknown' %>">
+                  <%= problem[:difficulty] || 'Unknown' %>
+                </span>
+              </div>
+              
+              <div class="problem-details">
+                <div class="detail-item">
+                  <span>🔤</span>
+                  <%= problem[:language] || 'N/A' %>
+                </div>
+                <div class="detail-item">
+                  <span>⏰</span>
+                  <%= problem[:solved_at] ? Time.at(problem[:solved_at].to_i).strftime("%B %d, %Y") : 'N/A' %>
+                </div>
+                <div class="detail-item">
+                  <span>🏆</span>
+                  <%= problem[:status] || 'Solved' %>
+                </div>
+              </div>
+              
+              <div class="notes-section">
+                <div class="notes-title">
+                  <span>📝</span>
+                  Notes
+                </div>
+                <div class="notes-content">
+                  <% if problem[:notes] && !problem[:notes].empty? %>
+                    <%= problem[:notes] %>
+                  <% else %>
+                    <em>No notes added yet. Click the problem title to view on LeetCode and add your own notes.</em>
+                  <% end %>
+                </div>
+              </div>
+              
+              <!-- Algorithm Tags -->
+              <% if problem[:algorithms] && problem[:algorithms].any? %>
+                <div class="algo-tags">
+                  <% problem[:algorithms].each do |algo| %>
+                    <span class="algo-tag"><%= algo %></span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state">
+          <h3>No solved problems found</h3>
+          <p>Click the sync button above to fetch your solved problems from LeetCode.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <script>
+    function syncProblems() {
+      // This would call the sync endpoint to refresh problems
+      location.reload();
+    }
+    
+    // Search and filter functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('searchInput');
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const algoFilterButtons = document.querySelectorAll('.algo-filter-btn');
+      const problemCards = document.querySelectorAll('.problem-card');
+      const clearFiltersBtn = document.getElementById('clearFilters');
+      
+      let currentFilters = ['all'];
+      let currentSearch = '';
+      let currentAlgoFilters = ['all'];
+      
+      // Initialize the "All" filter as active
+      const allFilterBtn = document.querySelector('[data-filter="all"]');
+      if (allFilterBtn) {
+        allFilterBtn.classList.add('active');
+      }
+      
+      // Initialize the "Show All" algorithm filter as active
+      const allAlgoFilterBtn = document.querySelector('[data-algorithm="all"]');
+      if (allAlgoFilterBtn) {
+        allAlgoFilterBtn.classList.add('active');
+      }
+      
+      // Search functionality
+      searchInput.addEventListener('input', function() {
+        currentSearch = this.value.toLowerCase();
+        filterProblems();
+      });
+      
+      // Difficulty filter functionality
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const filterValue = this.getAttribute('data-filter');
+          
+          if (filterValue === 'all') {
+            // If "All" is clicked, reset to only "All"
+            currentFilters = ['all'];
+            filterButtons.forEach(btn => btn.classList.remove('active', 'selected'));
+            this.classList.add('active');
+          } else {
+            // Remove "all" from current filters
+            currentFilters = currentFilters.filter(f => f !== 'all');
+            
+            if (currentFilters.includes(filterValue)) {
+              // Remove this filter
+              currentFilters = currentFilters.filter(f => f !== filterValue);
+              this.classList.remove('selected');
+              if (currentFilters.length === 0) {
+                // If no filters selected, default to "all"
+                currentFilters = ['all'];
+                const allBtn = document.querySelector('[data-filter="all"]');
+                if (allBtn) {
+                  allBtn.classList.remove('active');
+                  allBtn.classList.add('active');
+                }
+              }
+            } else {
+              // Add this filter
+              currentFilters.push(filterValue);
+              this.classList.add('selected');
+              // Remove "all" button active state
+              const allBtn = document.querySelector('[data-filter="all"]');
+              if (allBtn) {
+                allBtn.classList.remove('active');
+              }
+            }
+          }
+          
+          filterProblems();
+        });
+      });
+      
+      // Algorithm filter functionality
+      algoFilterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const algoValue = this.getAttribute('data-algorithm');
+          
+          if (algoValue === 'all') {
+            // If "Show All" is clicked, reset to only "all"
+            currentAlgoFilters = ['all'];
+            algoFilterButtons.forEach(btn => btn.classList.remove('active', 'selected'));
+            this.classList.add('active');
+          } else {
+            // Remove "all" from current filters
+            currentAlgoFilters = currentAlgoFilters.filter(f => f !== 'all');
+            
+            if (currentAlgoFilters.includes(algoValue)) {
+              // Remove this filter
+              currentAlgoFilters = currentAlgoFilters.filter(f => f !== algoValue);
+              this.classList.remove('selected');
+              if (currentAlgoFilters.length === 0) {
+                // If no filters selected, default to "all"
+                currentAlgoFilters = ['all'];
+                document.querySelector('[data-algorithm="all"]').classList.add('active');
+              }
+            } else {
+              // Add this filter
+              currentAlgoFilters.push(algoValue);
+              this.classList.add('selected');
+              // Remove "Show All" button active state
+              document.querySelector('[data-algorithm="all"]').classList.remove('active');
+            }
+          }
+          
+          filterProblems();
+        });
+      });
+      
+      // Clear all filters functionality
+      clearFiltersBtn.addEventListener('click', function() {
+        // Reset search input
+        searchInput.value = '';
+        currentSearch = '';
+        
+        // Reset difficulty filters
+        filterButtons.forEach(btn => btn.classList.remove('active', 'selected'));
+        document.querySelector('[data-filter="all"]').classList.add('active');
+        currentFilters = ['all'];
+        
+        // Reset algorithm filters
+        algoFilterButtons.forEach(btn => btn.classList.remove('active', 'selected'));
+        document.querySelector('[data-algorithm="all"]').classList.add('active');
+        currentAlgoFilters = ['all'];
+        
+        // Show all problems
+        filterProblems();
+      });
+      
+      function filterProblems() {
+        problemCards.forEach(card => {
+          const title = card.querySelector('.problem-title').textContent.toLowerCase();
+          const difficulty = card.querySelector('.difficulty-badge').getAttribute('data-difficulty');
+          const algorithms = Array.from(card.querySelectorAll('.algo-tag')).map(tag => tag.textContent);
+          
+          const matchesSearch = title.includes(currentSearch);
+          const matchesDifficultyFilter = currentFilters.includes('all') || currentFilters.includes(difficulty);
+          const matchesAlgoFilter = currentAlgoFilters.includes('all') || currentAlgoFilters.some(filter => algorithms.includes(filter));
+          
+          if (matchesSearch && matchesDifficultyFilter && matchesAlgoFilter) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+        
+        updateCounts();
+      }
+      
+      function updateCounts() {
+        const visibleCards = document.querySelectorAll('.problem-card:not(.hidden)');
+        const allCount = document.getElementById('allCount');
+        const easyCount = document.getElementById('easyCount');
+        const mediumCount = document.getElementById('mediumCount');
+        const hardCount = document.getElementById('hardCount');
+        
+        if (allCount) allCount.textContent = visibleCards.length;
+        if (easyCount) easyCount.textContent = Array.from(visibleCards).filter(card => card.querySelector('.difficulty-badge').getAttribute('data-difficulty') === 'Easy').length;
+        if (mediumCount) mediumCount.textContent = Array.from(visibleCards).filter(card => card.querySelector('.difficulty-badge').getAttribute('data-difficulty') === 'Medium').length;
+        if (hardCount) hardCount.textContent = Array.from(visibleCards).filter(card => card.querySelector('.difficulty-badge').getAttribute('data-difficulty') === 'Hard').length;
+      }
+    });
+  </script>
+</body>
+</html>

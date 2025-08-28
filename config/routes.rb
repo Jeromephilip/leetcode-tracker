@@ -5,17 +5,20 @@ Rails.application.routes.draw do
   # API routes for LeetCode integration
   namespace :api do
     namespace :v1 do
-      post 'leetcode/authenticate', to: 'leetcode_auth#authenticate'
-      post 'leetcode/sync_profile', to: 'leetcode_auth#sync_profile'
-      get 'leetcode/check_username/:username', to: 'leetcode_auth#check_username_availability'
+      post "leetcode/authenticate", to: "leetcode_auth#authenticate"
+      post "leetcode/sync_profile", to: "leetcode_auth#sync_profile"
+      get "leetcode/check_username/:username", to: "leetcode_auth#check_username_availability"
     end
   end
 
   # Dashboard route
-  get 'dashboard', to: 'dashboard#index'
-  
+  get "dashboard", to: "dashboard#index"
+
+  # Problems route
+  get "problems", to: "problems#index"
+
   # Logout route
-  get 'logout', to: 'dashboard#logout'
+  get "logout", to: "dashboard#logout"
 
   # Defines the root path route ("/")
   root "home#index"

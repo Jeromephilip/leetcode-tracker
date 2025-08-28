@@ -10,6 +10,50 @@
       background-color: #f5f5f5;
     }
     
+    .navbar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px 30px;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .navbar-brand {
+      color: white;
+      font-size: 1.5em;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    
+    .navbar-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .navbar-link {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    
+    .navbar-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .navbar-link.active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -191,13 +235,21 @@
   </style>
 </head>
 <body>
+  <div class="navbar">
+    <div class="navbar-content">
+      <a href="/dashboard" class="navbar-brand">🚀 LeetCode Tracker</a>
+      <div class="navbar-links">
+        <a href="/dashboard" class="navbar-link active">📊 Dashboard</a>
+        <a href="/problems" class="navbar-link">📝 Problems</a>
+        <a href="/logout" class="navbar-link">🚪 Logout</a>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
     <div class="header">
       <h1>🚀 LeetCode Dashboard</h1>
       <p>Welcome back, <%= @user.leetcode_username %>!</p>
-      <div style="margin-top: 15px;">
-        <a href="/logout" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3);">🚪 Logout</a>
-      </div>
     </div>
     
     <% if @error %>

@@ -1,51 +1,26 @@
-class DashboardController < ApplicationController
+class ProblemsController < ApplicationController
   before_action :authenticate_user!
 
   def index
     @user = current_user
 
     if @user.leetcode_cookies.nil?
-      render :link_account
+      redirect_to dashboard_path, alert: "Please link your LeetCode account first"
       return
     end
 
     cookies = parse_cookies(@user.leetcode_cookies)
 
     if cookies.empty?
-      @error = "Unable to parse LeetCode cookies. Please re-link your account."
-      @leetcode_service = nil
-      @recent_submissions = []
-      @leetcode_profile = nil
-    else
-      @leetcode_service = LeetcodeService.new(cookies)
-
-      @leetcode_profile = @leetcode_service.fetch_user_profile
-      if @leetcode_profile
-        @user.update(
-          leetcode_solved_count: @leetcode_profile[:solved_count],
-          leetcode_total_count: @leetcode_profile[:total_active_days],
-          leetcode_rank: @leetcode_profile[:rank],
-          leetcode_last_sync: Time.current
-        )
-      end
-
-      @recent_submissions = @leetcode_service.fetch_recent_submissions
+      redirect_to dashboard_path, alert: "Unable to parse LeetCode cookies. Please re-link your account."
+      return
     end
-  end
 
-  def logout
-    sign_out(current_user)
-    redirect_to root_path, notice: "Successfully logged out"
-  end
-
-  def link_account
+    @leetcode_service = LeetcodeService.new(cookies)
+    @solved_problems = @leetcode_service.fetch_solved_problems || []
   end
 
   private
-
-  def current_user
-    super
-  end
 
   def parse_cookies(cookies)
     Rails.logger.info "Raw cookies type: #{cookies.class}, value: #{cookies.inspect}"
