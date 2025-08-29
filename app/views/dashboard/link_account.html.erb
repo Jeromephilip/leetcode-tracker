@@ -1,198 +1,319 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Link Your LeetCode Account - LeetCode Tracker</title>
+  <title>Link LeetCode Account</title>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      padding: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    
+    .navbar {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
+      padding: 15px 30px;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-content {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
+    }
+    
+    .navbar-brand {
+      color: white;
+      font-size: 1.5em;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    
+    .navbar-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .navbar-link {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    
+    .navbar-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .navbar-link.active {
+      background: rgba(255, 255, 255, 0.3);
     }
     
     .container {
+      max-width: 800px;
+      margin: 0 auto;
       background: white;
-      border-radius: 16px;
-      padding: 40px;
-      max-width: 600px;
-      text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
     }
     
     .header {
-      margin-bottom: 30px;
+      background: #f8f9fa;
+      padding: 30px;
+      text-align: center;
+      border-bottom: 1px solid #e9ecef;
     }
     
     .header h1 {
-      color: #2d3748;
-      margin: 0 0 10px 0;
+      margin: 0;
       font-size: 2.5em;
+      font-weight: 300;
+      color: #333;
     }
     
     .header p {
-      color: #718096;
-      font-size: 1.2em;
-      margin: 0;
+      margin: 10px 0 0 0;
+      color: #6c757d;
+      font-size: 1.1em;
     }
     
-    .steps {
-      background: #f7fafc;
+    .content {
       padding: 30px;
-      border-radius: 12px;
-      margin: 30px 0;
-      text-align: left;
     }
     
-    .steps h2 {
-      color: #2d3748;
-      margin: 0 0 20px 0;
-      text-align: center;
-    }
-    
-    .step {
-      display: flex;
-      align-items: flex-start;
-      margin: 20px 0;
-      padding: 15px;
-      background: white;
+    .step-section {
+      margin-bottom: 30px;
+      padding: 25px;
+      background: #f8f9fa;
       border-radius: 8px;
       border-left: 4px solid #667eea;
     }
     
-    .step-number {
-      background: #667eea;
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      margin-right: 15px;
-      flex-shrink: 0;
+    .step-section h3 {
+      color: #333;
+      margin-top: 0;
+      margin-bottom: 15px;
     }
     
-    .step-content h3 {
-      margin: 0 0 8px 0;
-      color: #2d3748;
+    .step-section p {
+      color: #6c757d;
+      line-height: 1.6;
+      margin-bottom: 15px;
     }
     
-    .step-content p {
+    .step-list {
       margin: 0;
-      color: #718096;
+      padding-left: 20px;
+    }
+    
+    .step-list li {
+      color: #6c757d;
+      margin: 8px 0;
       line-height: 1.5;
     }
     
-    .actions {
-      margin-top: 30px;
+    .code-block {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.9em;
+      margin: 15px 0;
+      overflow-x: auto;
     }
     
-    .btn {
-      display: inline-block;
-      padding: 15px 30px;
-      margin: 10px;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-    
-    .btn-primary {
-      background: #667eea;
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background: #5a67d8;
-      transform: translateY(-2px);
-    }
-    
-    .btn-secondary {
-      background: #e2e8f0;
-      color: #4a5568;
-    }
-    
-    .btn-secondary:hover {
-      background: #cbd5e0;
-    }
-    
-    .extension-note {
-      background: #e6fffa;
-      border: 1px solid #81e6d9;
+    .highlight-box {
+      background: #e7f3ff;
+      border: 1px solid #b3d9ff;
       border-radius: 8px;
       padding: 20px;
       margin: 20px 0;
     }
     
-    .extension-note h3 {
-      color: #2c7a7b;
-      margin: 0 0 10px 0;
+    .highlight-box h4 {
+      color: #004085;
+      margin-top: 0;
+      margin-bottom: 10px;
     }
     
-    .extension-note p {
-      color: #285e61;
+    .highlight-box p {
+      color: #004085;
       margin: 0;
-      line-height: 1.5;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      margin: 10px 10px 10px 0;
+      font-weight: 500;
+    }
+    
+    .btn:hover {
+      background: #5a6fd8;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-primary {
+      background: #667eea;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    
+    .extension-info {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .extension-info h4 {
+      color: #856404;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    
+    .extension-info p {
+      color: #856404;
+      margin: 0;
+    }
+    
+    .warning-box {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .warning-box h4 {
+      color: #721c24;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    
+    .warning-box p {
+      color: #721c24;
+      margin: 0;
     }
   </style>
 </head>
 <body>
+  <div class="navbar">
+    <div class="navbar-content">
+      <a href="/dashboard" class="navbar-brand">LeetCode Tracker</a>
+      <div class="navbar-links">
+        <a href="/dashboard" class="navbar-link active">Dashboard</a>
+        <a href="/problems" class="navbar-link">Problems</a>
+        <a href="/logout" class="navbar-link">Logout</a>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
     <div class="header">
-      <h1>🔗 Link Your LeetCode Account</h1>
-      <p>Welcome, <%= current_user.email %>! To access your dashboard, you need to link your LeetCode account first.</p>
+      <h1>Link Your LeetCode Account</h1>
+      <p>Follow these steps to connect your LeetCode account and start tracking your progress</p>
     </div>
     
-    <div class="steps">
-      <h2>📋 Follow These Steps:</h2>
-      
-      <div class="step">
-        <div class="step-number">1</div>
-        <div class="step-content">
-          <h3>Go to LeetCode</h3>
-          <p>Visit <a href="https://leetcode.com" target="_blank" style="color: #667eea;">leetcode.com</a> and make sure you're logged in to your LeetCode account.</p>
+    <div class="content">
+      <div class="step-section">
+        <h3>Step 1: Install the Chrome Extension</h3>
+        <p>First, you need to install our Chrome extension to securely link your LeetCode account.</p>
+        
+        <ol class="step-list">
+          <li>Open Chrome and navigate to <code>chrome://extensions/</code></li>
+          <li>Enable "Developer mode" in the top right corner</li>
+          <li>Click "Load unpacked" and select the <code>public/chrome-extension</code> folder from this project</li>
+          <li>You should see "LeetCode Tracker" appear in your extensions list</li>
+        </ol>
+        
+        <div class="highlight-box">
+          <h4>Important</h4>
+          <p>Make sure you're using Chrome or a Chromium-based browser for this to work.</p>
         </div>
       </div>
       
-      <div class="step">
-        <div class="step-number">2</div>
-        <div class="step-content">
-          <h3>Install Our Chrome Extension</h3>
-          <p>If you haven't already, install our LeetCode Tracker Chrome extension from the Chrome Web Store.</p>
+      <div class="step-section">
+        <h3>Step 2: Log in to LeetCode</h3>
+        <p>Ensure you're logged into your LeetCode account before proceeding.</p>
+        
+        <ol class="step-list">
+          <li>Go to <a href="https://leetcode.com" target="_blank">leetcode.com</a></li>
+          <li>Sign in with your LeetCode credentials</li>
+          <li>Verify you can see your profile and solved problems</li>
+        </ol>
+        
+        <a href="https://leetcode.com" target="_blank" class="btn btn-primary">Go to LeetCode</a>
+      </div>
+      
+      <div class="step-section">
+        <h3>Step 3: Link Your Account</h3>
+        <p>Use the Chrome extension to securely link your LeetCode account.</p>
+        
+        <ol class="step-list">
+          <li>Click the LeetCode Tracker extension icon in your Chrome toolbar</li>
+          <li>Click "Link Account" to connect your LeetCode account</li>
+          <li>Your account will be automatically created and linked</li>
+          <li>You'll be redirected to your dashboard</li>
+        </ol>
+        
+        <div class="extension-info">
+          <h4>Chrome Extension Required</h4>
+          <p>The extension securely fetches your LeetCode authentication cookies and sends them to this application to establish the connection.</p>
         </div>
       </div>
       
-      <div class="step">
-        <div class="step-number">3</div>
-        <div class="step-content">
-          <h3>Click "Link Account"</h3>
-          <p>While on LeetCode, click the extension icon and then click "Link Account" to connect your account.</p>
-        </div>
+      <div class="step-section">
+        <h3>How It Works</h3>
+        <p>Our Chrome extension securely communicates with this application to:</p>
+        
+        <ul class="step-list">
+          <li>Fetch your LeetCode authentication cookies</li>
+          <li>Create a secure connection between your LeetCode account and our app</li>
+          <li>Sync your profile data, solved problems, and submission history</li>
+          <li>Enable real-time progress tracking and note-taking</li>
+        </ul>
       </div>
       
-      <div class="step">
-        <div class="step-number">4</div>
-        <div class="step-content">
-          <h3>Access Your Dashboard</h3>
-          <p>You'll be automatically redirected to your dashboard where you can see your LeetCode progress!</p>
-        </div>
+      <div class="warning-box">
+        <h4>Security Note</h4>
+        <p>Your LeetCode cookies are only sent to this local development server. The extension only requests necessary permissions and doesn't store sensitive data locally. All communication is encrypted and secure.</p>
       </div>
-    </div>
-    
-    <div class="extension-note">
-      <h3>💡 Chrome Extension Required</h3>
-      <p>Our Chrome extension securely connects your LeetCode account to our app. It only reads your LeetCode data and doesn't store any passwords or sensitive information.</p>
-    </div>
-    
-    <div class="actions">
-      <a href="https://leetcode.com" target="_blank" class="btn btn-primary">🚀 Go to LeetCode</a>
-      <a href="/" class="btn btn-secondary">🏠 Back to Home</a>
+      
+      <div class="step-section">
+        <h3>Need Help?</h3>
+        <p>If you encounter any issues during the setup process:</p>
+        
+        <ul class="step-list">
+          <li>Make sure you're logged into LeetCode</li>
+          <li>Check that this Rails server is running</li>
+          <li>Try refreshing the extension popup</li>
+          <li>Check the browser console for error messages</li>
+          <li>Ensure the extension is properly loaded in Chrome</li>
+        </ul>
+        
+        <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+      </div>
     </div>
   </div>
 </body>

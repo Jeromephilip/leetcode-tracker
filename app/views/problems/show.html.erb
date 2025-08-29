@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= @problem[:title] %> - <%= @user.leetcode_username %></title>
+  <meta name="csrf-token" content="<%= form_authenticity_token %>">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+    
+    .navbar-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .navbar-brand {
+      color: white;
+      font-size: 1.5em;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    
+    .navbar-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .navbar-link {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    
+    .navbar-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .navbar-link.active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .main-container {
+      margin-top: 80px;
+      height: calc(100vh - 80px);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .problem-header {
+      background: white;
+      padding: 25px 30px;
+      border-bottom: 1px solid #e9ecef;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .problem-title {
+      font-size: 2.2em;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 15px 0;
+    }
+    
+    .problem-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #6c757d;
+      font-size: 1em;
+    }
+    
+    .difficulty-badge {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 600;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    
+    .difficulty-easy {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .difficulty-medium {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    
+    .difficulty-hard {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .content-area {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      overflow: hidden;
+    }
+    
+    .notes-section {
+      flex: 1;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+
+    
+    .notes-content {
+      flex: 1;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      max-width: 100%;
+    }
+    
+
+    
+    .notes-textarea {
+      flex: 1;
+      width: 100%;
+      max-width: 100%;
+      padding: 20px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 1em;
+      line-height: 1.6;
+      resize: none;
+      transition: border-color 0.2s;
+      background: #fafbfc;
+      box-sizing: border-box;
+      overflow-x: hidden;
+      word-wrap: break-word;
+    }
+    
+    .notes-textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      background: white;
+    }
+    
+    .actions-section {
+      background: white;
+      padding: 20px 30px;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 500;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #5a6fd8;
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: #218838;
+    }
+    
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border: 1px solid #c3e6cb;
+      display: none;
+    }
+    
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .problem-link {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .problem-link:hover {
+      text-decoration: underline;
+    }
+    
+    .back-link {
+      color: #6c757d;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+    
+    .back-link:hover {
+      color: #495057;
+    }
+    
+    .algorithm-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+    
+    .algo-tag {
+      padding: 6px 12px;
+      background: #e9ecef;
+      color: #495057;
+      border-radius: 16px;
+      font-size: 0.8em;
+      border: 1px solid #dee2e6;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-content">
+      <a href="/dashboard" class="navbar-brand">LeetCode Tracker</a>
+      <div class="navbar-links">
+        <a href="/dashboard" class="navbar-link">Dashboard</a>
+        <a href="/problems" class="navbar-link active">Problems</a>
+        <a href="/logout" class="navbar-link">Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="problem-header">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h1 class="problem-title"><%= @problem[:title] %></h1>
+                      <div class="problem-meta">
+              <div class="meta-item">
+                <span>Difficulty:</span>
+                <span class="difficulty-badge difficulty-<%= @problem[:difficulty]&.downcase %>">
+                  <%= @problem[:difficulty] || 'Unknown' %>
+                </span>
+              </div>
+            </div>
+          
+          <% if @problem[:algorithms] && @problem[:algorithms].any? %>
+            <div class="algorithm-tags">
+              <% @problem[:algorithms].each do |algo| %>
+                <span class="algo-tag"><%= algo %></span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        
+        <div style="text-align: right;">
+          <a href="<%= @problem[:url] %>" target="_blank" class="btn btn-primary">
+            View on LeetCode
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-area">
+      <div class="notes-section">
+
+        
+        <div class="notes-content">
+          <div class="success-message" id="successMessage">
+            Notes saved successfully!
+          </div>
+          
+          <textarea 
+            id="notesTextarea" 
+            class="notes-textarea" 
+            placeholder="Write your notes here..."
+          ><%= @problem[:notes] %></textarea>
+        </div>
+      </div>
+    </div>
+    
+    <div class="actions-section">
+      <a href="/problems" class="back-link">
+        ← Back to Problems
+      </a>
+      
+      <div style="display: flex; gap: 15px;">
+        <button type="submit" class="btn btn-primary" id="saveBtn">Save Notes</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const notesTextarea = document.getElementById('notesTextarea');
+    const saveBtn = document.getElementById('saveBtn');
+    const successMessage = document.getElementById('successMessage');
+    
+    let currentProblemId = '<%= @problem[:id] %>';
+    let originalNotes = '<%= j @problem[:notes] %>';
+    
+
+    
+    // Save notes functionality
+    saveBtn.addEventListener('click', function() {
+      saveNotes();
+    });
+    
+
+    
+    // Handle unsaved changes warning
+    window.addEventListener('beforeunload', function(e) {
+      if (notesTextarea.value !== originalNotes) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+      }
+    });
+    
+    // Save notes and close function
+    function saveNotesAndClose() {
+      const notes = notesTextarea.value.trim();
+      const originalText = saveBtn.textContent;
+      
+      // Show loading state
+      saveBtn.textContent = 'Saving...';
+      saveBtn.disabled = true;
+      notesTextarea.disabled = true;
+      
+      // Make API call to save notes
+      fetch('/api/v1/problems/notes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        },
+        body: JSON.stringify({
+          problem_id: currentProblemId,
+          problem_title: '<%= @problem[:title] %>',
+          notes: notes
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Update original notes
+          originalNotes = notes;
+          // Redirect to problems page
+          window.location.href = '/problems';
+        } else {
+          alert('Error saving notes: ' + (data.error || 'Unknown error'));
+          // Reset button state
+          saveBtn.textContent = originalText;
+          saveBtn.disabled = false;
+          notesTextarea.disabled = false;
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving notes. Please try again.');
+        // Reset button state
+        saveBtn.textContent = originalText;
+        saveBtn.disabled = false;
+        notesTextarea.disabled = false;
+      });
+    }
+    
+    function saveNotes() {
+      const notes = notesTextarea.value.trim();
+      const originalText = saveBtn.textContent;
+      
+      // Show loading state
+      saveBtn.textContent = 'Saving...';
+      saveBtn.disabled = true;
+      notesTextarea.disabled = true;
+      
+      // Make API call to save notes
+      fetch('/api/v1/problems/notes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        },
+        body: JSON.stringify({
+          problem_id: currentProblemId,
+          problem_title: '<%= @problem[:title] %>',
+          notes: notes
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Show success message
+          successMessage.style.display = "block";
+          
+          // Update original notes to prevent unsaved changes warning
+          originalNotes = notes;
+          
+          // Hide success message after a delay
+          setTimeout(() => {
+            successMessage.style.display = "none";
+          }, 3000);
+        } else {
+          alert('Error saving notes: ' + (data.error || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving notes. Please try again.');
+      })
+      .finally(() => {
+        // Reset button state
+        saveBtn.textContent = originalText;
+        saveBtn.disabled = false;
+        notesTextarea.disabled = false;
+      });
+    }
+    
+    // Auto-save functionality (every 30 seconds if there are changes)
+    setInterval(function() {
+      if (notesTextarea.value !== originalNotes && notesTextarea.value.trim() !== '') {
+        // Auto-save without showing loading state
+        fetch('/api/v1/problems/notes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+          },
+          body: JSON.stringify({
+            problem_id: currentProblemId,
+            problem_title: '<%= @problem[:title] %>',
+            notes: notesTextarea.value.trim()
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            originalNotes = notesTextarea.value;
+            console.log('Auto-saved successfully');
+          }
+        })
+        .catch(error => {
+          console.error('Auto-save error:', error);
+        });
+      }
+    }, 30000);
+    
+    // Focus on textarea when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      notesTextarea.focus();
+    });
+  </script>
+</body>
+</html>

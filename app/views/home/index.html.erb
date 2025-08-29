@@ -1,242 +1,184 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>LeetCode Tracker</title>
+  <title>LeetCode Tracker - Home</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+    
+    .logo {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 20px;
+    }
+    
+    .welcome-message {
+      color: #6c757d;
+      margin-bottom: 30px;
       line-height: 1.6;
     }
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .section {
+    
+    .flash-messages {
       margin-bottom: 30px;
-      padding: 20px;
-      border: 1px solid #ddd;
+    }
+    
+    .flash-notice {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
       border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #c3e6cb;
     }
-    .step {
-      background-color: #f8f9fa;
+    
+    .flash-alert {
+      background: #f8d7da;
+      color: #721c24;
       padding: 15px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border-left: 4px solid #007bff;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #f5c6cb;
     }
-    .code {
-      background-color: #f1f3f4;
-      padding: 10px;
-      border-radius: 4px;
-      font-family: monospace;
-      margin: 10px 0;
+    
+    .auth-section {
+      margin-bottom: 30px;
     }
-    .highlight {
-      background-color: #fff3cd;
-      border: 1px solid #ffeaa7;
-      padding: 15px;
-      border-radius: 5px;
-      margin: 20px 0;
+    
+    .auth-section h4 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .auth-section p {
+      color: #6c757d;
+      margin-bottom: 20px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      margin: 0 10px;
+      font-weight: 500;
+    }
+    
+    .btn:hover {
+      background: #5a6fd8;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    
+    .btn-success {
+      background: #28a745;
+    }
+    
+    .btn-success:hover {
+      background: #218838;
+    }
+    
+    .features {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .features h3 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .feature-list li {
+      color: #6c757d;
+      margin: 10px 0;
+      padding: 8px 0;
     }
   </style>
 </head>
 <body>
-  <!-- Debug info -->
-  <% if Rails.env.development? %>
-    <div style="background: #f8f9fa; color: #6c757d; padding: 10px; margin: 10px; border-radius: 4px; font-size: 12px; font-family: monospace;">
-      Debug: Controller: <%= controller.class.name %>, Action: <%= action_name %><br>
-      Routes loaded: <%= Rails.application.routes.routes.count %> routes available
+  <div class="container">
+    <div class="logo">LeetCode Tracker</div>
+    
+    <div class="welcome-message">
+      Track your LeetCode progress, manage solved problems, and add personal notes to improve your problem-solving skills.
     </div>
-  <% end %>
-  
-  <% if flash[:notice] %>
-    <div style="background: #d4edda; color: #155724; padding: 15px; margin: 20px; border-radius: 8px; border: 1px solid #c3e6cb;">
-      ✅ <%= flash[:notice] %>
+    
+    <div class="flash-messages">
+      <% if flash[:notice] %>
+        <div class="flash-notice">
+          <%= flash[:notice] %>
+        </div>
+      <% end %>
+      
+      <% if flash[:alert] %>
+        <div class="flash-alert">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-  
-  <% if flash[:alert] %>
-    <div style="background: #f8d7da; color: #721c24; padding: 15px; margin: 20px; border-radius: 8px; border: 1px solid #f5c6cb;">
-      ⚠️ <%= flash[:alert] %>
-    </div>
-  <% end %>
-  
-  <div class="header">
-    <h1>🚀 LeetCode Tracker</h1>
-    <p>Track your LeetCode progress and achievements with our Chrome extension integration</p>
     
     <% if user_signed_in? %>
-      <!-- User is logged in -->
-      <div style="margin-top: 20px;">
-        <div style="background: white; padding: 20px; border-radius: 8px; display: inline-block; margin-bottom: 20px;">
-          <h3>🎉 Welcome back, <%= current_user.email %>!</h3>
-          
-          <% if current_user.leetcode_cookies.present? %>
-            <!-- User has LeetCode account linked -->
-            <div style="background: #d4edda; padding: 15px; border-radius: 6px; margin: 15px 0; border-left: 4px solid #28a745;">
-              <h4>✅ LeetCode Account Linked!</h4>
-              <p>Great! Your LeetCode account is already connected. You can access your dashboard now!</p>
-              <a href="/dashboard" style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 10px;">📊 Go to Dashboard</a>
-            </div>
-          <% else %>
-            <!-- User needs to link LeetCode account -->
-            <p>You're logged in! Now you need to link your LeetCode account to access the dashboard.</p>
-            
-            <div style="background: #e7f3ff; padding: 15px; border-radius: 6px; margin: 15px 0; border-left: 4px solid #007bff;">
-              <h4>📋 Steps to Link Your Account:</h4>
-              <ol style="margin: 10px 0; padding-left: 20px;">
-                <li><strong>Go to LeetCode:</strong> <a href="https://leetcode.com" target="_blank" style="color: #007bff;">leetcode.com</a></li>
-                <li><strong>Log in to LeetCode</strong> (or create an account if you don't have one)</li>
-                <li><strong>Install our Chrome extension</strong> and click "Link Account"</li>
-                <li><strong>You'll be redirected back</strong> to your dashboard automatically!</li>
-              </ol>
-            </div>
-            
-            <div style="margin-top: 15px;">
-              <a href="https://leetcode.com" target="_blank" style="background: #ffa500; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">🚀 Go to LeetCode</a>
-            </div>
-          <% end %>
-          
-          <div style="margin-top: 15px;">
-            <a href="/logout" style="background: #6c757d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">🚪 Logout</a>
-          </div>
-        </div>
+      <div class="auth-section">
+        <h4>LeetCode Account Linked!</h4>
+        <p>Welcome back! You're all set to track your LeetCode progress.</p>
+        <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+        <a href="https://leetcode.com" target="_blank" class="btn btn-secondary">Go to LeetCode</a>
+        <a href="/logout" class="btn btn-secondary">Logout</a>
       </div>
     <% else %>
-      <!-- User is not logged in -->
-      <div style="margin-top: 20px;">
-        <div style="background: white; padding: 20px; border-radius: 8px; display: inline-block; margin-bottom: 20px;">
-          <h3>🔐 Get Started</h3>
-          <p>First, create an account or log in to our app, then use the Chrome extension to link your LeetCode account!</p>
-          
-          <div style="margin-top: 15px;">
-            <a href="/users/sign_up" style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">📝 Create Account</a>
-            <a href="/users/sign_in" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-left: 10px;">🔑 Login</a>
-          </div>
-        </div>
+      <div class="auth-section">
+        <h4>Get Started</h4>
+        <p>Create an account to start tracking your LeetCode journey.</p>
+        <a href="/users/sign_up" class="btn btn-success">Create Account</a>
       </div>
     <% end %>
-  </div>
-
-  <div class="section">
-    <h2>How It Works</h2>
-    <p>
-      LeetCode Tracker allows you to link your LeetCode account using a Chrome extension that securely 
-      fetches your authentication cookies and syncs your profile data to our application.
-    </p>
-  </div>
-
-  <div class="section">
-    <h2>Getting Started</h2>
     
-    <div class="step">
-      <h3>Step 1: Install the Chrome Extension</h3>
-      <ol>
-        <li>Open Chrome and go to <code>chrome://extensions/</code></li>
-        <li>Enable "Developer mode" in the top right</li>
-        <li>Click "Load unpacked" and select the <code>public/chrome-extension</code> folder</li>
-      </ol>
-    </div>
-
-    <div class="step">
-      <h3>Step 2: Log in to LeetCode</h3>
-      <p>Make sure you're logged into your LeetCode account at <a href="https://leetcode.com" target="_blank">leetcode.com</a></p>
-    </div>
-
-    <div class="step">
-      <h3>Step 3: Link Your Account</h3>
-      <ol>
-        <li>Click the LeetCode Tracker extension icon in your Chrome toolbar</li>
-        <li>Click "Link Account" to connect your LeetCode account</li>
-        <li>Your account will be automatically created and linked</li>
-      </ol>
+    <div class="features">
+      <h3>Features</h3>
+      <ul class="feature-list">
+        <li>Track solved problems and progress</li>
+        <li>Add personal notes and insights</li>
+        <li>View submission history</li>
+        <li>Monitor your LeetCode ranking</li>
+        <li>Sync data automatically</li>
+      </ul>
     </div>
   </div>
-
-  <div class="section">
-    <h2>Features</h2>
-    <ul>
-      <li><strong>Secure Authentication:</strong> Uses your LeetCode cookies for secure login</li>
-      <li><strong>Profile Sync:</strong> Automatically syncs your LeetCode statistics</li>
-      <li><strong>Progress Tracking:</strong> Monitor your solved problems and ranking</li>
-      <li><strong>Real-time Updates:</strong> Keep your data current with manual sync</li>
-    </ul>
-  </div>
-
-  <div class="highlight">
-    <h3>🔒 Security Note</h3>
-    <p>
-      Your LeetCode cookies are only sent to this local development server. The extension only requests 
-      necessary permissions and doesn't store sensitive data locally.
-    </p>
-  </div>
-
-  <div class="section">
-    <h2>API Endpoints</h2>
-    <p>For developers, here are the available API endpoints:</p>
-    
-    <div class="code">
-      <strong>POST /api/v1/leetcode/authenticate</strong><br>
-      Link your LeetCode account using cookies
-    </div>
-    
-    <div class="code">
-      <strong>POST /api/v1/leetcode/sync_profile</strong><br>
-      Sync your LeetCode profile data (requires authentication)
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>Need Help?</h2>
-    <p>
-      If you encounter any issues:
-    </p>
-    <ul>
-      <li>Make sure you're logged into LeetCode</li>
-      <li>Check that this Rails server is running</li>
-      <li>Try refreshing the extension popup</li>
-      <li>Check the browser console for error messages</li>
-    </ul>
-  </div>
-  
-  <script>
-    function testFunction() {
-      alert('JavaScript is working!');
-      console.log('Test function called');
-    }
-    
-    function goToDashboard() {
-      const token = document.getElementById('authToken').value.trim();
-      console.log('Token entered:', token);
-      
-      if (!token) {
-        alert('Please enter your JWT token');
-        return;
-      }
-      
-      // Store token in sessionStorage for the dashboard
-      sessionStorage.setItem('authToken', token);
-      console.log('Token stored in sessionStorage');
-      
-      // Redirect to dashboard with token as URL parameter
-      window.location.href = `/dashboard?token=${encodeURIComponent(token)}`;
-    }
-    
-    // Add event listener for Enter key
-    document.addEventListener('DOMContentLoaded', function() {
-      const tokenInput = document.getElementById('authToken');
-      if (tokenInput) {
-        tokenInput.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            goToDashboard();
-          }
-        });
-      }
-      console.log('DOM loaded, event listeners added');
-    });
-  </script>
 </body>
 </html>

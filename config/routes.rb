@@ -8,14 +8,16 @@ Rails.application.routes.draw do
       post "leetcode/authenticate", to: "leetcode_auth#authenticate"
       post "leetcode/sync_profile", to: "leetcode_auth#sync_profile"
       get "leetcode/check_username/:username", to: "leetcode_auth#check_username_availability"
+      post "problems/notes", to: "problems#notes"
     end
   end
 
   # Dashboard route
   get "dashboard", to: "dashboard#index"
 
-  # Problems route
+  # Problems routes
   get "problems", to: "problems#index"
+  get "problems/:id", to: "problems#show", as: :problem
 
   # Logout route
   get "logout", to: "dashboard#logout"

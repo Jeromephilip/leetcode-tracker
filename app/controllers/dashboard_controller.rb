@@ -9,27 +9,60 @@ class DashboardController < ApplicationController
       return
     end
 
-    cookies = parse_cookies(@user.leetcode_cookies)
+    begin
+      cookies = parse_cookies(@user.leetcode_cookies)
 
-    if cookies.empty?
-      @error = "Unable to parse LeetCode cookies. Please re-link your account."
-      @leetcode_service = nil
-      @recent_submissions = []
-      @leetcode_profile = nil
-    else
-      @leetcode_service = LeetcodeService.new(cookies)
+      if cookies.empty?
+        @error = "Unable to parse LeetCode cookies. Please re-link your account."
+        @leetcode_service = nil
+        @recent_submissions = []
+        @leetcode_stats = {}
+      else
+        @leetcode_service = LeetcodeService.new(cookies)
 
-      @leetcode_profile = @leetcode_service.fetch_user_profile
-      if @leetcode_profile
-        @user.update(
-          leetcode_solved_count: @leetcode_profile[:solved_count],
-          leetcode_total_count: @leetcode_profile[:total_active_days],
-          leetcode_rank: @leetcode_profile[:rank],
-          leetcode_last_sync: Time.current
-        )
+        @leetcode_profile = @leetcode_service.fetch_user_profile
+        if @leetcode_profile
+          Rails.logger.info "LeetCode profile fetched: #{@leetcode_profile.inspect}"
+
+          # Update user stats in database
+          @user.update(
+            leetcode_solved_count: @leetcode_profile[:solved_count],
+            leetcode_total_count: @leetcode_profile[:total_count] || @leetcode_profile[:total_active_days],
+            leetcode_rank: @leetcode_profile[:rank],
+            leetcode_last_sync: Time.current
+          )
+
+          # Set stats for the view - handle both data structures
+          @leetcode_stats = {
+            solved_count: @leetcode_profile[:solved_count] || 0,
+            total_count: @leetcode_profile[:total_count] || @leetcode_profile[:total_active_days] || 0,
+            rank: @leetcode_profile[:rank] || "N/A",
+            total_active_days: @leetcode_profile[:total_active_days] || 0
+          }
+        else
+          Rails.logger.warn "Failed to fetch LeetCode profile"
+          @leetcode_stats = {
+            solved_count: 0,
+            total_count: 0,
+            rank: "N/A",
+            total_active_days: 0
+          }
+        end
+
+        @recent_submissions = @leetcode_service.fetch_recent_submissions || []
+        Rails.logger.info "Recent submissions fetched: #{@recent_submissions.length} submissions"
       end
-
-      @recent_submissions = @leetcode_service.fetch_recent_submissions
+    rescue => e
+      Rails.logger.error "Error in dashboard controller: #{e.message}"
+      Rails.logger.error "Backtrace: #{e.backtrace.first(5).join("\n")}"
+      @error = "An error occurred while fetching your LeetCode data. Please try again."
+      @leetcode_stats = {
+        solved_count: 0,
+        total_count: 0,
+        rank: "N/A",
+        total_active_days: 0
+      }
+      @recent_submissions = []
     end
   end
 

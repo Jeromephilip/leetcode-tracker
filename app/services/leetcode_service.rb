@@ -93,13 +93,17 @@ class LeetcodeService
     Rails.logger.info "Fetched #{submissions.length} submissions"
 
     submissions.first(10).map do |submission|
+      # Handle different possible data structures
+      title = submission["title"] || submission["question__title"] || "Unknown"
+      title_slug = submission["title_slug"] || submission["question__title_slug"] || title.parameterize
+
       {
         id: submission["id"],
-        title: submission["title"],
-        status: submission["status_display"],
-        language: submission["lang"],
+        title: title,
+        status: submission["status_display"] || submission["status"] || "Unknown",
+        language: submission["lang"] || submission["language"] || "Unknown",
         timestamp: submission["timestamp"],
-        url: "https://leetcode.com/problems/#{submission['title_slug']}"
+        url: "https://leetcode.com/problems/#{title_slug}"
       }
     end
   rescue => e
@@ -149,9 +153,7 @@ class LeetcodeService
                         when 3 then "Hard"
                         else "Unknown"
                         end,
-            language: "N/A", # We don't have language info from this endpoint
             status: "Solved",
-            solved_at: nil, # We don't have timestamp from this endpoint
             url: "https://leetcode.com/problems/#{stat['question__title_slug']}",
             notes: "", # Placeholder for future notes feature
             algorithms: detect_algorithms(stat["question__title"], stat["question__title_slug"])

@@ -2,6 +2,8 @@
 <html>
 <head>
   <title>Solved Problems - <%= @user.leetcode_username %></title>
+  <meta name="csrf-token" content="<%= form_authenticity_token %>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -140,6 +142,12 @@
       border-left: 4px solid #28a745;
       opacity: 1;
       transform: scale(1);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      min-height: 300px;
+      max-width: 100%;
+      overflow: hidden;
     }
     
     .problem-card:hover {
@@ -161,8 +169,9 @@
       font-weight: 600;
       color: #333;
       text-decoration: none;
-      flex: 1;
-      min-width: 250px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      max-width: 100%;
     }
     
     .problem-title:hover {
@@ -203,6 +212,7 @@
       color: #6c757d;
       font-size: 0.9em;
       margin-bottom: 15px;
+      flex-shrink: 0;
     }
     
     .detail-item {
@@ -221,6 +231,12 @@
       border-radius: 6px;
       padding: 15px;
       margin-top: 15px;
+      height: 120px;
+      overflow: hidden;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 100%;
     }
     
     .notes-title {
@@ -235,6 +251,30 @@
     .notes-content {
       color: #555;
       line-height: 1.6;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 5px;
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    .notes-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .notes-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    .notes-content::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+
+    .notes-content::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
     }
     
     .empty-state {
@@ -405,6 +445,7 @@
       gap: 6px;
       flex-wrap: wrap;
       margin-top: 10px;
+      margin-top: auto;
     }
     
     .algo-tag {
@@ -427,23 +468,339 @@
       border-color: #667eea;
       color: white;
     }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 0;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      animation: modalSlideIn 0.3s ease-out;
+      overflow: hidden;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 1.5em;
+      font-weight: 600;
+    }
+
+    .close {
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      line-height: 1;
+      transition: opacity 0.2s;
+    }
+
+    .close:hover {
+      opacity: 0.7;
+    }
+
+    .modal-body {
+      padding: 30px;
+      overflow: hidden;
+      max-width: 100%;
+    }
+
+    .problem-info {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid #667eea;
+    }
+
+    .problem-info h3 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+
+    .problem-meta {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #6c757d;
+      font-size: 0.9em;
+    }
+
+    .notes-form {
+      margin-top: 20px;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .notes-label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .notes-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1em;
+      line-height: 1.6;
+      resize: vertical;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+      overflow-x: hidden;
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    .notes-textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5a6fd8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+    }
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border: 1px solid #c3e6cb;
+      display: none;
+    }
+
+
+
+    /* Markdown Content Styling */
+    .markdown-content {
+      line-height: 1.6;
+      color: #333;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    .markdown-content h1,
+    .markdown-content h2,
+    .markdown-content h3,
+    .markdown-content h4,
+    .markdown-content h5,
+    .markdown-content h6 {
+      margin: 20px 0 10px 0;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    .markdown-content h1 { font-size: 1.5em; }
+    .markdown-content h2 { font-size: 1.3em; }
+    .markdown-content h3 { font-size: 1.1em; }
+
+    .markdown-content p {
+      margin: 10px 0;
+    }
+
+    .markdown-content ul,
+    .markdown-content ol {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+
+    .markdown-content li {
+      margin: 5px 0;
+    }
+
+    .markdown-content code {
+      background: #f8f9fa;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.9em;
+      color: #e83e8c;
+    }
+
+    .markdown-content pre {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 15px;
+      overflow-x: auto;
+      margin: 15px 0;
+      max-width: 100%;
+      word-wrap: break-word;
+    }
+
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+      color: #333;
+    }
+
+    .markdown-content blockquote {
+      border-left: 4px solid #667eea;
+      margin: 15px 0;
+      padding: 10px 20px;
+      background: #f8f9fa;
+      font-style: italic;
+      color: #6c757d;
+    }
+
+    .markdown-content strong,
+    .markdown-content b {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .markdown-content em,
+    .markdown-content i {
+      font-style: italic;
+      color: #6c757d;
+    }
+
+    .markdown-content a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    .markdown-content a:hover {
+      text-decoration: underline;
+    }
+
+    .markdown-content table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 15px 0;
+      max-width: 100%;
+      overflow-x: auto;
+      display: block;
+    }
+
+    .markdown-content th,
+    .markdown-content td {
+      border: 1px solid #dee2e6;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    .markdown-content th {
+      background: #f8f9fa;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
   <div class="navbar">
     <div class="navbar-content">
-      <a href="/dashboard" class="navbar-brand">🚀 LeetCode Tracker</a>
+      <a href="/dashboard" class="navbar-brand">LeetCode Tracker</a>
       <div class="navbar-links">
-        <a href="/dashboard" class="navbar-link">📊 Dashboard</a>
-        <a href="/problems" class="navbar-link active">📝 Problems</a>
-        <a href="/logout" class="navbar-link">🚪 Logout</a>
+        <a href="/dashboard" class="navbar-link">Dashboard</a>
+        <a href="/problems" class="navbar-link active">Problems</a>
+        <a href="/logout" class="navbar-link">Logout</a>
       </div>
     </div>
   </div>
 
   <div class="container">
     <div class="header">
-      <h1>📝 Solved Problems</h1>
+      <h1>Solved Problems</h1>
       <p>Track your progress and add notes to your solved problems</p>
     </div>
     
@@ -468,22 +825,23 @@
     
     <div class="content">
       <div class="section-title">
-        📚 Your Solved Problems
-        <button class="sync-button" onclick="syncProblems()">🔄 Sync</button>
+        Your Solved Problems
+        <button class="sync-button" onclick="syncProblems()">Sync</button>
       </div>
       
       <div style="margin-bottom: 20px; padding: 15px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #007bff;">
         <p style="margin: 0; color: #004085; font-size: 0.9em;">
-          💡 <strong>Note:</strong> This page shows all problems you've solved on LeetCode. 
-          <br>📊 Data is synced from your LeetCode account. Click "Sync" to refresh.
+          <strong>Note:</strong> This page shows all problems you've solved on LeetCode. 
+          <br>Data is synced from your LeetCode account. Click "Sync" to refresh.
+          <br><strong>Click on any problem card to add or edit notes!</strong>
         </p>
       </div>
       
               <!-- Search and Filter Section -->
         <div class="search-section">
           <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 Search problems..." class="search-input">
-            <button id="clearFilters" class="clear-filters-btn">🗑️ Clear All Filters</button>
+            <input type="text" id="searchInput" placeholder="Search problems..." class="search-input">
+            <button id="clearFilters" class="clear-filters-btn">Clear All Filters</button>
           </div>
           
 
@@ -517,41 +875,36 @@
       <% if @solved_problems.any? %>
         <div class="problems-grid">
           <% @solved_problems.each do |problem| %>
-            <div class="problem-card">
+            <div class="problem-card" data-problem-id="<%= problem[:id] || problem[:title].parameterize %>" data-problem-title="<%= problem[:title] %>" data-problem-difficulty="<%= problem[:difficulty] || 'Unknown' %>" data-problem-notes="<%= problem[:notes] || '' %>">
               <div class="problem-header">
-                <a href="<%= problem[:url] %>" target="_blank" class="problem-title">
-                  <%= problem[:title] %>
-                </a>
-                <span class="difficulty-badge difficulty-<%= problem[:difficulty]&.downcase %>" data-difficulty="<%= problem[:difficulty] || 'Unknown' %>">
-                  <%= problem[:difficulty] || 'Unknown' %>
-                </span>
+                <div style="flex: 1; min-width: 0;">
+                  <a href="<%= problem[:url] %>" target="_blank" class="problem-title" onclick="event.stopPropagation();">
+                    <%= problem[:title] %>
+                  </a>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+                  <span class="difficulty-badge difficulty-<%= problem[:difficulty]&.downcase %>" data-difficulty="<%= problem[:difficulty] || 'Unknown' %>">
+                    <%= problem[:difficulty] || 'Unknown' %>
+                  </span>
+                  <a href="/problems/<%= problem[:id] %>" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8em; text-decoration: none;" onclick="event.stopPropagation();">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                </div>
               </div>
               
-              <div class="problem-details">
-                <div class="detail-item">
-                  <span>🔤</span>
-                  <%= problem[:language] || 'N/A' %>
-                </div>
-                <div class="detail-item">
-                  <span>⏰</span>
-                  <%= problem[:solved_at] ? Time.at(problem[:solved_at].to_i).strftime("%B %d, %Y") : 'N/A' %>
-                </div>
-                <div class="detail-item">
-                  <span>🏆</span>
-                  <%= problem[:status] || 'Solved' %>
-                </div>
-              </div>
+
               
               <div class="notes-section">
                 <div class="notes-title">
-                  <span>📝</span>
-                  Notes
+                  <span>Notes</span>
                 </div>
                 <div class="notes-content">
                   <% if problem[:notes] && !problem[:notes].empty? %>
-                    <%= problem[:notes] %>
+                    <div class="markdown-content">
+                      <%= markdown_to_html(problem[:notes]) %>
+                    </div>
                   <% else %>
-                    <em>No notes added yet. Click the problem title to view on LeetCode and add your own notes.</em>
+                    <em>No notes added yet. Click the problem card to add notes!</em>
                   <% end %>
                 </div>
               </div>
@@ -575,8 +928,230 @@
       <% end %>
     </div>
   </div>
+
+      <!-- Notes Modal -->
+  <div id="notesModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Problem Notes</h2>
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <a href="#" id="expandProblemBtn" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9em; text-decoration: none;">
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+          <span class="close">&times;</span>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="success-message" id="successMessage">
+          Notes saved successfully!
+        </div>
+        
+        <div class="problem-info">
+          <h3 id="modalProblemTitle"></h3>
+          <div class="problem-meta">
+            <div class="meta-item">
+              <span>Difficulty</span>
+              <span id="modalProblemDifficulty"></span>
+            </div>
+          </div>
+        </div>
+        
+        <form class="notes-form" id="notesForm">
+          <label for="notesTextarea" class="notes-label">Your Notes (Markdown Supported):</label>
+          <textarea 
+            id="notesTextarea" 
+            class="notes-textarea" 
+            placeholder="# Problem Notes&#10;&#10;## Key Insights&#10;• Use hash table for O(n) solution&#10;• Two pointer approach also works&#10;&#10;## Time Complexity&#10;- **Best Case:** O(n)&#10;- **Space:** O(n)&#10;&#10;## Code Example&#10;```python&#10;def two_sum(nums, target):&#10;    seen = {}&#10;    for i, num in enumerate(nums):&#10;        complement = target - num&#10;        if complement in seen:&#10;            return [seen[complement], i]&#10;        seen[num] = i&#10;    return []&#10;```&#10;&#10;## What I Learned&#10;Always consider hash table for lookup problems!"
+          ></textarea>
+          
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="saveBtn">Save Notes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
   
   <script>
+    // Modal functionality
+    const modal = document.getElementById('notesModal');
+    const closeBtn = document.querySelector('.close');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const notesForm = document.getElementById('notesForm');
+    const notesTextarea = document.getElementById('notesTextarea');
+    const successMessage = document.getElementById('successMessage');
+    const expandProblemBtn = document.getElementById('expandProblemBtn');
+    
+    let currentProblemId = null;
+    
+    // Close modal when clicking on X or Cancel
+    closeBtn.onclick = function() {
+      modal.style.display = "none";
+    }
+    
+    cancelBtn.onclick = function() {
+      modal.style.display = "none";
+    }
+    
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && modal.style.display === 'block') {
+        modal.style.display = "none";
+      }
+    });
+    
+    // Handle expand button click
+    expandProblemBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (currentProblemId) {
+        window.open(`/problems/${currentProblemId}`, '_blank');
+      }
+    });
+    
+    // Make problem cards clickable
+    document.addEventListener('DOMContentLoaded', function() {
+      const problemCards = document.querySelectorAll('.problem-card');
+      
+      problemCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          // Don't open modal if clicking on the title link
+          if (e.target.classList.contains('problem-title')) {
+            return;
+          }
+          
+          openNotesModal(this);
+        });
+      });
+
+
+    });
+    
+    function openNotesModal(problemCard) {
+      const problemId = problemCard.dataset.problemId;
+      const problemTitle = problemCard.dataset.problemTitle;
+      const problemDifficulty = problemCard.dataset.problemDifficulty;
+      const problemNotes = problemCard.dataset.problemNotes;
+      
+      // Set modal content
+      document.getElementById('modalProblemTitle').textContent = problemTitle;
+      document.getElementById('modalProblemDifficulty').textContent = problemDifficulty;
+      notesTextarea.value = problemNotes;
+      
+      currentProblemId = problemId;
+      
+      // Show modal
+      modal.style.display = "block";
+      notesTextarea.focus();
+      
+      // Hide success message
+      successMessage.style.display = "none";
+    }
+    
+    // Handle form submission
+    notesForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      saveNotes();
+    });
+    
+    // Simple markdown to HTML converter for client-side updates
+    function convertMarkdownToHtml(markdown) {
+      if (!markdown) return '';
+      
+      return markdown
+        // Headers
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        // Bold and italic
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        // Code blocks
+        .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        // Lists
+        .replace(/^\* (.*$)/gim, '<li>$1</li>')
+        .replace(/^- (.*$)/gim, '<li>$1</li>')
+        .replace(/^(\d+)\. (.*$)/gim, '<li>$2</li>')
+        // Links
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+        // Line breaks
+        .replace(/\n/g, '<br>');
+    }
+
+    function saveNotes() {
+      const notes = notesTextarea.value.trim();
+      const saveBtn = document.getElementById('saveBtn');
+      const originalText = saveBtn.textContent;
+      
+      // Show loading state
+      saveBtn.textContent = 'Saving...';
+      saveBtn.disabled = true;
+      notesTextarea.disabled = true;
+      
+      // Make API call to save notes
+      fetch('/api/v1/problems/notes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        },
+        body: JSON.stringify({
+          problem_id: currentProblemId,
+          problem_title: document.getElementById('modalProblemTitle').textContent,
+          notes: notes
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Show success message
+          successMessage.style.display = "block";
+          
+                     // Update the problem card's notes
+           const problemCard = document.querySelector(`[data-problem-id="${currentProblemId}"]`);
+           if (problemCard) {
+             problemCard.dataset.problemNotes = notes;
+             const notesContent = problemCard.querySelector('.notes-content');
+             if (notesContent) {
+               if (notes && notes.trim()) {
+                 // Convert markdown to HTML for display
+                 const markdownHtml = convertMarkdownToHtml(notes);
+                 notesContent.innerHTML = `<div class="markdown-content">${markdownHtml}</div>`;
+               } else {
+                 notesContent.innerHTML = '<em>No notes added yet. Click the problem card to add notes!</em>';
+               }
+             }
+           }
+          
+          // Reset form and close modal after a delay
+          setTimeout(() => {
+            modal.style.display = "none";
+            notesForm.reset();
+          }, 1500);
+        } else {
+          alert('Error saving notes: ' + (data.error || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving notes. Please try again.');
+      })
+      .finally(() => {
+        // Reset button state
+        saveBtn.textContent = originalText;
+        saveBtn.disabled = false;
+        notesTextarea.disabled = false;
+      });
+    }
+    
     function syncProblems() {
       // This would call the sync endpoint to refresh problems
       location.reload();
