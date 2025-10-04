@@ -86,7 +86,18 @@ class LeetcodeService
   end
 
   def fetch_recent_submissions
+    # Add a small delay to avoid rate limiting
+    sleep(0.5) if @last_request_time && (Time.current - @last_request_time) < 1.0
+
     response = get("/api/submissions/")
+    @last_request_time = Time.current
+
+    # Handle 403 Forbidden - session expired or rate limited
+    if response.code == 403
+      Rails.logger.warn "LeetCode submissions API returned 403 - session may be expired or rate limited"
+      return []
+    end
+
     return [] unless response.success?
 
     submissions = response.parsed_response["submissions_dump"] || []
@@ -265,14 +276,10 @@ class LeetcodeService
 
 
   def calculate_total_active_days
-    submissions = fetch_recent_submissions
-    return 0 if submissions.empty?
-
-    unique_dates = submissions.map do |submission|
-      Time.at(submission[:timestamp]).to_date
-    end.uniq
-
-    unique_dates.count
+    # Don't fetch submissions here to avoid rate limiting
+    # Return a default value instead
+    Rails.logger.info "Skipping submissions fetch in calculate_total_active_days to avoid rate limiting"
+    0
   end
 
   def calculate_rank(solved_count, total_count)

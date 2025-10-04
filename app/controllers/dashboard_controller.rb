@@ -49,8 +49,8 @@ class DashboardController < ApplicationController
           }
         end
 
-        @recent_submissions = @leetcode_service.fetch_recent_submissions || []
-        Rails.logger.info "Recent submissions fetched: #{@recent_submissions.length} submissions"
+        @recent_submissions = []
+        Rails.logger.info "Skipping submissions fetch on dashboard load to avoid rate limiting"
       end
     rescue => e
       Rails.logger.error "Error in dashboard controller: #{e.message}"
