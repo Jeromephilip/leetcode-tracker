@@ -61,7 +61,9 @@ jobs:
           bundler-cache: true
 
       - name: Check for outdated dependencies
-        run: bundle outdated --strict
+        run: |
+          bundle config unset deployment
+          bundle outdated --strict
 
       - name: Check for vulnerable dependencies
         run: bundle audit --update
