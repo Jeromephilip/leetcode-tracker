@@ -1,0 +1,36 @@
+# Global owners
+* @jeromephilip
+
+# Core application files
+/app/controllers/ @jeromephilip
+/app/models/ @jeromephip
+/app/services/ @jeromephilip
+/app/jobs/ @jeromephilip
+
+# Configuration files
+/config/ @jeromephilip
+/Gemfile @jeromephilip
+/Gemfile.lock @jeromephilip
+
+# Database
+/db/ @jeromephilip
+
+# CI/CD and GitHub workflows
+/.github/ @jeromephilip
+/.github/workflows/ @jeromephilip
+
+# Documentation
+/docs/ @jeromephilip
+/README.md @jeromephilip
+
+# Security and linting
+/.rubocop.yml @jeromephilip
+/bin/brakeman @jeromephilip
+/bin/rubocop @jeromephilip
+
+# Docker and deployment
+/Dockerfile @jeromephilip
+/config/kamal.yml @jeromephilip
+
+# Chrome extension
+/public/chrome-extension/ @jeromephilip
