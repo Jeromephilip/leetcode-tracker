@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "leetcode/authenticate", to: "leetcode_auth#authenticate"
       post "leetcode/sync_profile", to: "leetcode_auth#sync_profile"
+      post "leetcode/sync_submissions", to: "leetcode_auth#sync_submissions"
       get "leetcode/check_username/:username", to: "leetcode_auth#check_username_availability"
       post "problems/notes", to: "problems#notes"
     end
@@ -14,6 +15,7 @@ Rails.application.routes.draw do
 
   # Dashboard route
   get "dashboard", to: "dashboard#index"
+  get "dashboard/link_account", to: "dashboard#link_account"
 
   # Problems routes
   get "problems", to: "problems#index"

@@ -29,10 +29,10 @@ module LeetcodeTracker
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     # config.api_only = true
-    
+
     # Ensure full Rails stack is loaded for web interface
     config.api_only = false
-    
+
     # Sessions are automatically configured when api_only is false
     # No need to manually add middleware
   end

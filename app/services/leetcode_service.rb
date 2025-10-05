@@ -86,7 +86,18 @@ class LeetcodeService
   end
 
   def fetch_recent_submissions
+    # Add a small delay to avoid rate limiting
+    sleep(0.5) if @last_request_time && (Time.current - @last_request_time) < 1.0
+
     response = get("/api/submissions/")
+    @last_request_time = Time.current
+
+    # Handle 403 Forbidden - session expired or rate limited
+    if response.code == 403
+      Rails.logger.warn "LeetCode submissions API returned 403 - session may be expired or rate limited"
+      return []
+    end
+
     return [] unless response.success?
 
     submissions = response.parsed_response["submissions_dump"] || []
@@ -100,10 +111,12 @@ class LeetcodeService
       {
         id: submission["id"],
         title: title,
+        title_slug: title_slug,
         status: submission["status_display"] || submission["status"] || "Unknown",
         language: submission["lang"] || submission["language"] || "Unknown",
         timestamp: submission["timestamp"],
-        url: "https://leetcode.com/problems/#{title_slug}"
+        url: "https://leetcode.com/problems/#{title_slug}",
+        code: submission["code"]
       }
     end
   rescue => e
@@ -113,14 +126,11 @@ class LeetcodeService
   end
 
   def fetch_solved_problems
-    # Fetch problems data directly - this gives us all problems with their status
     problems_response = get("/api/problems/all/")
 
     Rails.logger.info "Problems response: #{problems_response.code} - #{problems_response.success?}"
 
     return [] unless problems_response.success?
-
-    # Handle problems response - it might be a string that needs parsing
     problems_data = problems_response.parsed_response
     if problems_data.is_a?(String)
       begin
@@ -137,7 +147,6 @@ class LeetcodeService
     Rails.logger.info "Problems response preview: #{problems_data.inspect[0..200]}..." if problems_data
     Rails.logger.info "Fetched #{problems.length} problems"
 
-    # Filter only solved problems and create the data structure
     solved_problems = problems
       .select { |problem| problem["status"] == "ac" } # "ac" means accepted/solved
       .map do |problem|
@@ -155,7 +164,7 @@ class LeetcodeService
                         end,
             status: "Solved",
             url: "https://leetcode.com/problems/#{stat['question__title_slug']}",
-            notes: "", # Placeholder for future notes feature
+            notes: "",
             algorithms: detect_algorithms(stat["question__title"], stat["question__title_slug"])
           }
       end
@@ -265,14 +274,8 @@ class LeetcodeService
 
 
   def calculate_total_active_days
-    submissions = fetch_recent_submissions
-    return 0 if submissions.empty?
-
-    unique_dates = submissions.map do |submission|
-      Time.at(submission[:timestamp]).to_date
-    end.uniq
-
-    unique_dates.count
+    Rails.logger.info "Skipping submissions fetch in calculate_total_active_days to avoid rate limiting"
+    0
   end
 
   def calculate_rank(solved_count, total_count)

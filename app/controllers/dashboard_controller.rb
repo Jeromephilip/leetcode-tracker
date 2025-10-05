@@ -49,8 +49,9 @@ class DashboardController < ApplicationController
           }
         end
 
-        @recent_submissions = @leetcode_service.fetch_recent_submissions || []
-        Rails.logger.info "Recent submissions fetched: #{@recent_submissions.length} submissions"
+        # Load recent submissions from cache/db instead of fetching from API
+        @recent_submissions = Submission.recent_for_user(@user.id, 10)
+        Rails.logger.info "Loaded #{@recent_submissions.length} recent submissions from database"
       end
     rescue => e
       Rails.logger.error "Error in dashboard controller: #{e.message}"

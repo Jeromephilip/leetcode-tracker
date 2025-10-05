@@ -44,6 +44,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # N+1 query detection
+  # gem "bullet", "~> 7.0"  # Temporarily disabled - doesn't support Rails 8.0.2.1 yet
 end
 
 gem "devise", "~> 4.9"
