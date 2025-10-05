@@ -10,9 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_28_231055) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_232349) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "submissions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "leetcode_id", null: false
+    t.string "title", null: false
+    t.string "title_slug", null: false
+    t.string "status", null: false
+    t.string "language", null: false
+    t.bigint "timestamp", null: false
+    t.string "url", null: false
+    t.text "code"
+    t.datetime "submitted_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["submitted_at"], name: "index_submissions_on_submitted_at"
+    t.index ["user_id", "language"], name: "index_submissions_on_user_id_and_language"
+    t.index ["user_id", "leetcode_id"], name: "index_submissions_on_user_id_and_leetcode_id", unique: true
+    t.index ["user_id", "status"], name: "index_submissions_on_user_id_and_status"
+    t.index ["user_id", "submitted_at"], name: "index_submissions_on_user_id_and_submitted_at", order: { submitted_at: :desc }
+    t.index ["user_id"], name: "index_submissions_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -33,4 +54,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_28_231055) do
     t.index ["leetcode_username"], name: "index_users_on_leetcode_username", unique: true, where: "(leetcode_username IS NOT NULL)"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "submissions", "users"
 end

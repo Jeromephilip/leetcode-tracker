@@ -146,24 +146,30 @@ class Api::V1::LeetcodeAuthController < ApplicationController
       )
 
       # Try to fetch submissions, but don't fail the entire sync if it fails
-      submissions = []
+      api_submissions = []
       total_active_days = profile[:total_active_days] || 0
 
       begin
-        submissions = leetcode_service.fetch_recent_submissions || []
-        Rails.logger.info "Successfully fetched #{submissions.length} submissions during sync"
+        api_submissions = leetcode_service.fetch_recent_submissions || []
+        Rails.logger.info "Successfully fetched #{api_submissions.length} submissions during sync"
 
-        # Calculate actual active days from submissions if we have them
-        if submissions.any?
-          unique_dates = submissions.map do |submission|
+        # Store submissions in database
+        if api_submissions.any?
+          synced_submissions = Submission.sync_from_api(user, api_submissions) # Rails cache
+          Rails.logger.info "Synced #{synced_submissions.length} submissions to database"
+
+          # Calculate actual active days from submissions if we have them
+          unique_dates = api_submissions.map do |submission|
             Time.at(submission[:timestamp]).to_date
           end.uniq
           total_active_days = unique_dates.count
         end
       rescue => e
         Rails.logger.warn "Failed to fetch submissions during sync: #{e.message}"
-        # Continue with empty submissions rather than failing the entire sync
       end
+
+      # Get recent submissions from database for response
+      recent_submissions = Submission.recent_for_user(user.id, 10)
 
       render json: {
         success: true,
@@ -172,7 +178,7 @@ class Api::V1::LeetcodeAuthController < ApplicationController
           total_active_days: total_active_days,
           rank: profile[:rank]
         },
-        submissions: submissions,
+        submissions: Submission.to_api_array(recent_submissions),
         last_sync: Time.current.iso8601
       }
     else

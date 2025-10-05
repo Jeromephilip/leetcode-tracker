@@ -376,23 +376,23 @@
               <div class="submission-card">
                 <div class="submission-info">
                   <div class="submission-title">
-                    <a href="<%= submission[:url] %>" target="_blank" style="color: inherit; text-decoration: none;">
-                      <%= submission[:title] %>
+                    <a href="<%= submission.url %>" target="_blank" style="color: inherit; text-decoration: none;">
+                      <%= submission.title %>
                     </a>
                   </div>
                   <div class="submission-meta">
                     <div class="meta-item">
                       <span>Lang</span>
-                      <%= submission[:language] %>
+                      <%= submission.language %>
                     </div>
                     <div class="meta-item">
                       <span>Date</span>
-                      <%= Time.at(submission[:timestamp]).strftime("%B %d, %Y at %I:%M %p") %>
+                      <%= format_submission_time(submission.submitted_at) %>
                     </div>
                   </div>
                 </div>
-                <div class="submission-status status-<%= submission[:status].downcase %>">
-                  <%= submission[:status] %>
+                <div class="submission-status status-<%= submission.status.downcase %>">
+                  <%= submission.status %>
                 </div>
               </div>
             <% end %>
@@ -468,14 +468,12 @@
         showMessage('An error occurred while syncing. Please try again.', 'error');
       })
       .finally(() => {
-        // Reset button state
         syncButton.disabled = false;
         syncButton.textContent = originalText;
       });
     }
     
     function updateStats(stats) {
-      // Update stat cards
       const solvedCountEl = document.querySelector('.stat-card:nth-child(1) .stat-number');
       const totalCountEl = document.querySelector('.stat-card:nth-child(2) .stat-number');
       const rankEl = document.querySelector('.stat-card:nth-child(3) .stat-number');
@@ -491,7 +489,6 @@
       let submissionsGrid = document.querySelector('.submissions-grid');
       const sectionTitle = document.querySelector('.section-title');
       
-      // If submissions grid doesn't exist, create it
       if (!submissionsGrid) {
         submissionsGrid = document.createElement('div');
         submissionsGrid.className = 'submissions-grid';
@@ -504,7 +501,6 @@
         }
       }
       
-      // Update count in section title
       if (sectionTitle) {
         sectionTitle.innerHTML = `Recent Submissions (${submissions.length}) <button class="sync-button" onclick="syncSubmissions()">Sync</button>`;
       }
@@ -519,7 +515,6 @@
         return;
       }
       
-      // Generate submission cards
       submissionsGrid.innerHTML = submissions.map(submission => `
         <div class="submission-card">
           <div class="submission-info">
@@ -535,14 +530,15 @@
               </div>
               <div class="meta-item">
                 <span>Date</span>
-                ${new Date(submission.timestamp * 1000).toLocaleDateString('en-US', {
+                ${new Date(submission.submitted_at).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
                   hour: 'numeric',
                   minute: '2-digit',
-                  hour12: true
-                })}
+                  hour12: true,
+                  timeZone: 'UTC'
+                }).replace(/\b0(\d)\b/g, '$1')} UTC
               </div>
             </div>
           </div>
@@ -554,18 +550,15 @@
     }
     
     function showMessage(message, type) {
-      // Remove existing messages
       const existingMessage = document.querySelector('.sync-message');
       if (existingMessage) {
         existingMessage.remove();
       }
       
-      // Create new message
       const messageEl = document.createElement('div');
       messageEl.className = `sync-message ${type === 'success' ? 'success-message' : 'error-message'}`;
       messageEl.textContent = message;
       
-      // Add styles
       messageEl.style.cssText = `
         position: fixed;
         top: 20px;
@@ -579,7 +572,6 @@
         ${type === 'success' ? 'background: #28a745;' : 'background: #dc3545;'}
       `;
       
-      // Add animation styles
       const style = document.createElement('style');
       style.textContent = `
         @keyframes slideIn {
@@ -591,7 +583,6 @@
       
       document.body.appendChild(messageEl);
       
-      // Remove message after 3 seconds
       setTimeout(() => {
         if (messageEl.parentNode) {
           messageEl.remove();
