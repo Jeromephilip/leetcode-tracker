@@ -63,7 +63,7 @@ jobs:
       - name: Check for outdated dependencies
         run: |
           bundle config unset deployment
-          bundle outdated --strict
+          bundle outdated
 
       - name: Check for vulnerable dependencies
         run: bundle audit --update
