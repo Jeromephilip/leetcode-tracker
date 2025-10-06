@@ -218,6 +218,62 @@ class Api::V1::LeetcodeAuthController < ApplicationController
     }
   end
 
+  def refresh_session
+    user = current_user
+    return render json: { error: "Unauthorized" }, status: :unauthorized unless user
+
+    if user.leetcode_cookies.blank?
+      render json: {
+        error: "No LeetCode account linked",
+        message: "Please link your LeetCode account first"
+      }, status: :bad_request
+      return
+    end
+
+    # Schedule background refresh
+    LeetcodeSessionRefreshJob.perform_later(user.id, force_refresh: true)
+
+    render json: {
+      success: true,
+      message: "Session refresh initiated. Please check back in a few minutes.",
+      user_id: user.id,
+      leetcode_username: user.leetcode_username
+    }
+  end
+
+  def session_health
+    user = current_user
+    return render json: { error: "Unauthorized" }, status: :unauthorized unless user
+
+    if user.leetcode_cookies.blank?
+      render json: {
+        healthy: false,
+        message: "No LeetCode account linked",
+        last_sync: nil
+      }
+      return
+    end
+
+    begin
+      healthy = user.leetcode_session_healthy?
+
+      render json: {
+        healthy: healthy,
+        last_sync: user.leetcode_last_sync&.iso8601,
+        leetcode_username: user.leetcode_username,
+        activity_level: user.determine_activity_level,
+        refresh_interval: user.calculate_refresh_interval.to_i
+      }
+    rescue => e
+      Rails.logger.error "Error checking session health: #{e.message}"
+      render json: {
+        healthy: false,
+        error: "Failed to check session health",
+        last_sync: user.leetcode_last_sync&.iso8601
+      }, status: :internal_server_error
+    end
+  end
+
   private
 
   def set_cors_headers

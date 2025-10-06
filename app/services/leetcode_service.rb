@@ -307,6 +307,44 @@ class LeetcodeService
     end
   end
 
+  def refresh_session
+    Rails.logger.info "Attempting to refresh LeetCode session"
+
+    # Try different endpoints that might refresh the session
+    refresh_endpoints = [
+      "/api/user/status/",
+      "/api/problems/all/"
+    ]
+
+    refresh_endpoints.each do |endpoint|
+      begin
+        response = get(endpoint)
+        if response.success?
+          Rails.logger.info "Session refreshed using endpoint: #{endpoint}"
+          return true
+        end
+      rescue => e
+        Rails.logger.warn "Failed to refresh using #{endpoint}: #{e.message}"
+        next
+      end
+    end
+
+    Rails.logger.warn "All refresh attempts failed"
+    false
+  end
+
+  def session_healthy?
+    response = get("/api/problems/all/")
+    response.success? && response.code == 200
+  rescue => e
+    Rails.logger.error "Session health check failed: #{e.message}"
+    false
+  end
+
+  def cookies_expired?
+    !session_healthy?
+  end
+
   private
 
   def cookies_to_string

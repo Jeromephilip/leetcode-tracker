@@ -2,7 +2,7 @@
 
 A comprehensive web application that helps developers track their LeetCode progress, manage problem-solving statistics, and integrate with LeetCode's platform through a Chrome extension.
 
-## 🚀 Features
+## Features
 
 ### Core Functionality
 - **User Authentication**: Secure user registration and login using Devise
@@ -17,7 +17,7 @@ A comprehensive web application that helps developers track their LeetCode progr
 - **API Integration**: RESTful API for LeetCode data synchronization
 - **Responsive Design**: Modern, mobile-friendly user interface
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: Ruby on Rails 7
 - **Database**: SQLite (development), PostgreSQL (production ready)
@@ -26,7 +26,7 @@ A comprehensive web application that helps developers track their LeetCode progr
 - **Testing**: Minitest framework
 - **Background Jobs**: Sidekiq for async processing
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before running this application, make sure you have:
 
@@ -35,7 +35,7 @@ Before running this application, make sure you have:
 - Node.js and Yarn (for asset compilation)
 - Git
 
-## 🚀 Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
@@ -66,7 +66,7 @@ Before running this application, make sure you have:
    - Click "Load unpacked"
    - Select the `public/chrome-extension/` folder
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 Create a `.env` file in the root directory:
@@ -86,7 +86,7 @@ SECRET_KEY_BASE=your_secret_key_here
 ### Database Configuration
 The application uses SQLite by default for development. For production, update `config/database.yml` with your PostgreSQL credentials.
 
-## 📱 Usage
+## Usage
 
 ### Web Application
 1. Visit `http://localhost:3000` in your browser
@@ -100,7 +100,7 @@ The application uses SQLite by default for development. For production, update `
 3. Click the extension icon to sync your progress
 4. View real-time updates in your dashboard
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### Users Table
 - Basic user information (email, password)
@@ -113,7 +113,7 @@ The application uses SQLite by default for development. For production, update `
 - `add_leet_code_stats_to_users`: Statistics tracking
 - `fix_duplicate_leetcode_usernames`: Data integrity fixes
 
-## 🧪 Testing
+## Testing
 
 Run the test suite with:
 
@@ -128,7 +128,7 @@ rails test test/models/user_test.rb
 rails test test/controllers/dashboard_controller_test.rb
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Heroku
 1. Create a new Heroku app
@@ -140,7 +140,7 @@ rails test test/controllers/dashboard_controller_test.rb
 1. Build the image: `docker build -t leetcode-tracker .`
 2. Run the container: `docker run -p 3000:3000 leetcode-tracker`
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature-name`
@@ -148,17 +148,17 @@ rails test test/controllers/dashboard_controller_test.rb
 4. Push to the branch: `git push origin feature-name`
 5. Submit a pull request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [LeetCode](https://leetcode.com/) for providing the problem-solving platform
 - [Devise](https://github.com/heartcombo/devise) for authentication
 - [Ruby on Rails](https://rubyonrails.org/) community for the amazing framework
 
-## 📞 Support
+## Support
 
 If you encounter any issues or have questions:
 
@@ -168,6 +168,6 @@ If you encounter any issues or have questions:
 
 ---
 
-**Happy Coding! 🎯**
+**Happy Coding!**
 
 *Track your LeetCode progress, improve your skills, and build amazing applications.*
