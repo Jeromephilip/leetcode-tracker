@@ -4,67 +4,111 @@
   <title><%= @problem[:title] %> - <%= @user.leetcode_username %></title>
   <meta name="csrf-token" content="<%= form_authenticity_token %>">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    * {
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
       height: 100vh;
       overflow: hidden;
     }
-    
-    .navbar {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 15px 30px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .dashboard-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 60px;
+      background: white;
+      border-right: 1px solid #e9ecef;
+      padding: 20px 0;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
+      height: 100vh;
+      z-index: 100;
     }
-    
-    .navbar-content {
-      max-width: 1200px;
-      margin: 0 auto;
+
+    .sidebar-icon {
+      display: block;
+      width: 40px;
+      height: 40px;
+      margin: 10px auto;
+      border-radius: 8px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-    }
-    
-    .navbar-brand {
-      color: white;
-      font-size: 1.5em;
-      font-weight: bold;
+      justify-content: center;
       text-decoration: none;
+      color: #6c757d;
+      transition: all 0.2s ease;
     }
-    
-    .navbar-links {
-      display: flex;
-      gap: 20px;
+
+    .sidebar-icon:hover {
+      background: #f8f9fa;
+      color: #6f42c1;
     }
-    
-    .navbar-link {
+
+    .sidebar-icon.active {
+      background: #6f42c1;
       color: white;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      transition: background 0.2s;
     }
-    
-    .navbar-link:hover {
-      background: rgba(255, 255, 255, 0.2);
+
+    .sidebar-icon svg {
+      width: 20px;
+      height: 20px;
     }
-    
-    .navbar-link.active {
-      background: rgba(255, 255, 255, 0.3);
-    }
-    
-    .main-container {
-      margin-top: 80px;
-      height: calc(100vh - 80px);
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 60px;
       display: flex;
       flex-direction: column;
+      height: calc(100vh - 60px);
+      overflow: hidden;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 60px;
+      height: 60px;
+      background: white;
+      border-bottom: 1px solid #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 30px;
+      z-index: 99;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #6c757d;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #6f42c1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
     }
     
     .problem-header {
@@ -126,23 +170,23 @@
     .content-area {
       flex: 1;
       display: flex;
-      gap: 20px;
+      flex-direction: column;
       padding: 20px;
       overflow: hidden;
+      min-height: 0;
     }
     
     .notes-section {
       flex: 1;
-      width: 100%;
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      margin-bottom: 20px;
+      min-height: 0;
     }
-    
-
     
     .notes-content {
       flex: 1;
@@ -152,8 +196,6 @@
       overflow: hidden;
       max-width: 100%;
     }
-    
-
     
     .notes-textarea {
       flex: 1;
@@ -165,12 +207,14 @@
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       font-size: 1em;
       line-height: 1.6;
-      resize: none;
+      resize: vertical;
       transition: border-color 0.2s;
       background: #fafbfc;
       box-sizing: border-box;
       overflow-x: hidden;
       word-wrap: break-word;
+      min-height: 300px;
+      max-height: 500px;
     }
     
     .notes-textarea:focus {
@@ -283,22 +327,66 @@
       font-size: 0.8em;
       border: 1px solid #dee2e6;
     }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+      }
+
+      .top-bar {
+        left: 0;
+      }
+
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <div class="navbar-content">
-      <a href="/dashboard" class="navbar-brand">LeetCode Tracker</a>
-      <div class="navbar-links">
-        <a href="/dashboard" class="navbar-link">Dashboard</a>
-        <a href="/problems" class="navbar-link active">Problems</a>
-        <a href="/logout" class="navbar-link">Logout</a>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <a href="/dashboard" class="sidebar-icon" title="Dashboard">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+      </a>
+      <a href="/problems" class="sidebar-icon active" title="Problems">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </a>
+      <a href="/logout" class="sidebar-icon" title="Logout">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+        </svg>
+      </a>
+    </nav>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="user-menu">
+        <div class="user-avatar">
+          <%= (@user.leetcode_username || @user.email).first.upcase %>
+        </div>
+        <span><%= @user.leetcode_username || @user.email %></span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 10l5 5 5-5z"/>
+        </svg>
       </div>
     </div>
-  </div>
 
-  <div class="main-container">
+    <!-- Main Content -->
+    <main class="main-content" style="margin-top: 60px;">
     <div class="problem-header">
+      <div style="margin-bottom: 20px;">
+        <a href="/problems" class="back-link">
+          ← Back to Problems
+        </a>
+      </div>
+      
       <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
           <h1 class="problem-title"><%= @problem[:title] %></h1>
@@ -330,8 +418,6 @@
     
     <div class="content-area">
       <div class="notes-section">
-
-        
         <div class="notes-content">
           <div class="success-message" id="successMessage">
             Notes saved successfully!
@@ -344,17 +430,14 @@
           ><%= @problem[:notes] %></textarea>
         </div>
       </div>
-    </div>
-    
-    <div class="actions-section">
-      <a href="/problems" class="back-link">
-        ← Back to Problems
-      </a>
       
-      <div style="display: flex; gap: 15px;">
-        <button type="submit" class="btn btn-primary" id="saveBtn">Save Notes</button>
+      <div class="actions-section">
+        <div style="display: flex; gap: 15px;">
+          <button type="submit" class="btn btn-primary" id="saveBtn">Save Notes</button>
+        </div>
       </div>
     </div>
+    </main>
   </div>
   
   <script>
