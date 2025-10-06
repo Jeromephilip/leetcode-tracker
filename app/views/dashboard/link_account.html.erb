@@ -3,88 +3,175 @@
 <head>
   <title>Link LeetCode Account</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    * {
       margin: 0;
-      padding: 20px;
-      background-color: #f5f5f5;
+      padding: 0;
+      box-sizing: border-box;
     }
-    
-    .navbar {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 15px 30px;
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .dashboard-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 60px;
+      background: white;
+      border-right: 1px solid #e9ecef;
+      padding: 20px 0;
+      position: fixed;
+      height: 100vh;
+      z-index: 100;
+    }
+
+    .sidebar-icon {
+      display: block;
+      width: 40px;
+      height: 40px;
+      margin: 10px auto;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #6c757d;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-icon:hover {
+      background: #f8f9fa;
+      color: #6f42c1;
+    }
+
+    .sidebar-icon.active {
+      background: #6f42c1;
+      color: white;
+    }
+
+    .sidebar-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 60px;
+      padding: 30px;
+    }
+
+    /* Header */
+    .header {
       margin-bottom: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    
-    .navbar-content {
-      max-width: 1200px;
-      margin: 0 auto;
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .header p {
+      color: #6c757d;
+      font-size: 1rem;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 60px;
+      height: 60px;
+      background: white;
+      border-bottom: 1px solid #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 30px;
+      z-index: 99;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #6c757d;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #6f42c1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* Section */
+    .section {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e9ecef;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .section-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #e9ecef;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    
-    .navbar-brand {
-      color: white;
-      font-size: 1.5em;
-      font-weight: bold;
-      text-decoration: none;
-    }
-    
-    .navbar-links {
-      display: flex;
-      gap: 20px;
-    }
-    
-    .navbar-link {
-      color: white;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      transition: background 0.2s;
-    }
-    
-    .navbar-link:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    
-    .navbar-link.active {
-      background: rgba(255, 255, 255, 0.3);
-    }
-    
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-    }
-    
-    .header {
-      background: #f8f9fa;
-      padding: 30px;
-      text-align: center;
-      border-bottom: 1px solid #e9ecef;
-    }
-    
-    .header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      font-weight: 300;
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
       color: #333;
     }
-    
-    .header p {
-      margin: 10px 0 0 0;
-      color: #6c757d;
-      font-size: 1.1em;
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s ease;
     }
-    
-    .content {
-      padding: 30px;
+
+    .btn-primary {
+      background: #6f42c1;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5a32a3;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
     }
     
     .step-section {
@@ -215,27 +302,64 @@
       color: #721c24;
       margin: 0;
     }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .top-bar {
+        left: 0;
+      }
+
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <div class="navbar-content">
-      <a href="/dashboard" class="navbar-brand">LeetCode Tracker</a>
-      <div class="navbar-links">
-        <a href="/dashboard" class="navbar-link active">Dashboard</a>
-        <a href="/problems" class="navbar-link">Problems</a>
-        <a href="/logout" class="navbar-link">Logout</a>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <a href="/dashboard" class="sidebar-icon active" title="Dashboard">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+      </a>
+      <a href="/problems" class="sidebar-icon" title="Problems">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </a>
+      <a href="/logout" class="sidebar-icon" title="Logout">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+        </svg>
+      </a>
+    </nav>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="user-menu">
+        <div class="user-avatar">
+          <%= (@user.leetcode_username || @user.email).first.upcase %>
+        </div>
+        <span><%= @user.leetcode_username || @user.email %></span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 10l5 5 5-5z"/>
+        </svg>
       </div>
     </div>
-  </div>
 
-  <div class="container">
-    <div class="header">
-      <h1>Link Your LeetCode Account</h1>
-      <p>Follow these steps to connect your LeetCode account and start tracking your progress</p>
-    </div>
-    
-    <div class="content">
+    <!-- Main Content -->
+    <main class="main-content" style="margin-top: 60px;">
+      <div class="header">
+        <h1>Link Your LeetCode Account</h1>
+        <p>Follow these steps to connect your LeetCode account and start tracking your progress</p>
+      </div>
       <div class="step-section">
         <h3>Step 1: Install the Chrome Extension</h3>
         <p>First, you need to install our Chrome extension to securely link your LeetCode account.</p>
@@ -314,7 +438,7 @@
         
         <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
       </div>
-    </div>
+    </main>
   </div>
 </body>
 </html>
