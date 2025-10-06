@@ -103,7 +103,7 @@ class LeetcodeService
     submissions = response.parsed_response["submissions_dump"] || []
     Rails.logger.info "Fetched #{submissions.length} submissions"
 
-    submissions.first(10).map do |submission|
+    submissions.first(20).map do |submission|
       # Handle different possible data structures
       title = submission["title"] || submission["question__title"] || "Unknown"
       title_slug = submission["title_slug"] || submission["question__title_slug"] || title.parameterize

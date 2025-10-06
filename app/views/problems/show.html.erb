@@ -70,7 +70,8 @@
       margin-left: 60px;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      height: calc(100vh - 60px);
+      overflow: hidden;
     }
 
     /* Top Bar */
@@ -169,23 +170,23 @@
     .content-area {
       flex: 1;
       display: flex;
-      gap: 20px;
+      flex-direction: column;
       padding: 20px;
       overflow: hidden;
+      min-height: 0;
     }
     
     .notes-section {
       flex: 1;
-      width: 100%;
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      margin-bottom: 20px;
+      min-height: 0;
     }
-    
-
     
     .notes-content {
       flex: 1;
@@ -195,8 +196,6 @@
       overflow: hidden;
       max-width: 100%;
     }
-    
-
     
     .notes-textarea {
       flex: 1;
@@ -208,12 +207,14 @@
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       font-size: 1em;
       line-height: 1.6;
-      resize: none;
+      resize: vertical;
       transition: border-color 0.2s;
       background: #fafbfc;
       box-sizing: border-box;
       overflow-x: hidden;
       word-wrap: break-word;
+      min-height: 300px;
+      max-height: 500px;
     }
     
     .notes-textarea:focus {
@@ -380,6 +381,12 @@
     <!-- Main Content -->
     <main class="main-content" style="margin-top: 60px;">
     <div class="problem-header">
+      <div style="margin-bottom: 20px;">
+        <a href="/problems" class="back-link">
+          ← Back to Problems
+        </a>
+      </div>
+      
       <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
           <h1 class="problem-title"><%= @problem[:title] %></h1>
@@ -411,8 +418,6 @@
     
     <div class="content-area">
       <div class="notes-section">
-
-        
         <div class="notes-content">
           <div class="success-message" id="successMessage">
             Notes saved successfully!
@@ -425,16 +430,13 @@
           ><%= @problem[:notes] %></textarea>
         </div>
       </div>
-    </div>
-    
-    <div class="actions-section">
-      <a href="/problems" class="back-link">
-        ← Back to Problems
-      </a>
       
-      <div style="display: flex; gap: 15px;">
-        <button type="submit" class="btn btn-primary" id="saveBtn">Save Notes</button>
+      <div class="actions-section">
+        <div style="display: flex; gap: 15px;">
+          <button type="submit" class="btn btn-primary" id="saveBtn">Save Notes</button>
+        </div>
       </div>
+    </div>
     </main>
   </div>
   

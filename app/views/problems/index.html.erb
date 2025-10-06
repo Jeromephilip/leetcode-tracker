@@ -238,6 +238,58 @@
     .btn-primary:hover {
       background: #5a32a3;
     }
+
+    /* Table Styling */
+    .table-container {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    .submissions-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+    }
+
+    .submissions-table th,
+    .submissions-table td {
+      padding: 16px 24px;
+      text-align: left;
+      background: white;
+    }
+
+    .submissions-table th {
+      font-weight: 600;
+      color: #6c757d;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #f8f9fa;
+      border: none;
+      padding: 12px 24px;
+    }
+
+    .submissions-table tbody tr {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    .submissions-table tbody tr:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .submissions-table tbody td:first-child {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+
+    .submissions-table tbody td:last-child {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
     
     .problems-grid {
       display: grid;
@@ -978,11 +1030,10 @@
           <div class="stat-description">Intermediate level</div>
         </div>
         
-        <div class="stat-card featured">
+        <div class="stat-card">
           <div class="stat-number"><%= @solved_problems.count { |p| p[:difficulty] == 'Hard' } %></div>
           <div class="stat-label">Hard Problems</div>
           <div class="stat-description">Advanced level</div>
-          <button class="view-button" onclick="syncProblems()">Sync →</button>
         </div>
       </div>
 
@@ -992,104 +1043,59 @@
           <h2 class="section-title">Your Solved Problems</h2>
           <button class="btn btn-primary" onclick="syncProblems()">Sync Data</button>
         </div>
-      
-      <div style="margin-bottom: 20px; padding: 15px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #007bff;">
-        <p style="margin: 0; color: #004085; font-size: 0.9em;">
-          <strong>Note:</strong> This page shows all problems you've solved on LeetCode. 
-          <br>Data is synced from your LeetCode account. Click "Sync" to refresh.
-          <br><strong>Click on any problem card to add or edit notes!</strong>
-        </p>
-      </div>
-      
-              <!-- Search and Filter Section -->
-        <div class="search-section">
-          <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search problems..." class="search-input">
-            <button id="clearFilters" class="clear-filters-btn">Clear All Filters</button>
-          </div>
-          
-
-        <div class="filter-buttons">
-          <button class="filter-btn active" data-filter="all">All (<span id="allCount"><%= @solved_problems.length %></span>)</button>
-          <button class="filter-btn" data-filter="Easy">Easy (<span id="easyCount"><%= @solved_problems.count { |p| p[:difficulty] == 'Easy' } %></span>)</button>
-          <button class="filter-btn" data-filter="Medium">Medium (<span id="mediumCount"><%= @solved_problems.count { |p| p[:difficulty] == 'Medium' } %></span>)</button>
-          <button class="filter-btn" data-filter="Hard">Hard (<span id="hardCount"><%= @solved_problems.count { |p| p[:difficulty] == 'Hard' } %></span>)</button>
-        </div>
         
-        <!-- Algorithm Filter Section -->
-        <div class="algorithm-filters">
-          <h4 style="margin: 15px 0 10px 0; color: #333;">Algorithm Types (Click multiple to combine):</h4>
-          <div class="algorithm-buttons">
-            <button class="algo-filter-btn active" data-algorithm="all">
-              Show All (<span class="algo-count"><%= @solved_problems.length %></span>)
-            </button>
-            <% 
-              all_algorithms = @solved_problems.flat_map { |p| p[:algorithms] || [] }.uniq.sort
-              all_algorithms.each do |algo|
-                count = @solved_problems.count { |p| (p[:algorithms] || []).include?(algo) }
-            %>
-              <button class="algo-filter-btn" data-algorithm="<%= algo %>">
-                <%= algo %> (<span class="algo-count"><%= count %></span>)
-              </button>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      
-      <% if @solved_problems.any? %>
-        <div class="problems-grid">
-          <% @solved_problems.each do |problem| %>
-            <div class="problem-card" data-problem-id="<%= problem[:id] || problem[:title].parameterize %>" data-problem-title="<%= problem[:title] %>" data-problem-difficulty="<%= problem[:difficulty] || 'Unknown' %>" data-problem-notes="<%= problem[:notes] || '' %>">
-              <div class="problem-header">
-                <div style="flex: 1; min-width: 0;">
-                  <a href="<%= problem[:url] %>" target="_blank" class="problem-title" onclick="event.stopPropagation();">
-                    <%= problem[:title] %>
-                  </a>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
-                  <span class="difficulty-badge difficulty-<%= problem[:difficulty]&.downcase %>" data-difficulty="<%= problem[:difficulty] || 'Unknown' %>">
-                    <%= problem[:difficulty] || 'Unknown' %>
-                  </span>
-                  <a href="/problems/<%= problem[:id] %>" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8em; text-decoration: none;" onclick="event.stopPropagation();">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                </div>
-              </div>
-              
-
-              
-              <div class="notes-section">
-                <div class="notes-title">
-                  <span>Notes</span>
-                </div>
-                <div class="notes-content">
-                  <% if problem[:notes] && !problem[:notes].empty? %>
-                    <div class="markdown-content">
-                      <%= markdown_to_html(problem[:notes]) %>
-                    </div>
-                  <% else %>
-                    <em>No notes added yet. Click the problem card to add notes!</em>
-                  <% end %>
-                </div>
-              </div>
-              
-              <!-- Algorithm Tags -->
-              <% if problem[:algorithms] && problem[:algorithms].any? %>
-                <div class="algo-tags">
-                  <% problem[:algorithms].each do |algo| %>
-                    <span class="algo-tag"><%= algo %></span>
-                  <% end %>
-                </div>
-              <% end %>
+        <div class="table-container">
+          <% if @solved_problems.any? %>
+            <table class="submissions-table">
+              <thead>
+                <tr>
+                  <th>Problem</th>
+                  <th>Difficulty</th>
+                  <th>Notes</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @solved_problems.each do |problem| %>
+                  <tr>
+                    <td>
+                      <a href="<%= problem[:url] %>" target="_blank" class="problem-link">
+                        <%= problem[:title] %>
+                      </a>
+                    </td>
+                    <td>
+                      <span class="status-badge status-<%= problem[:difficulty]&.downcase %>">
+                        <%= problem[:difficulty] || 'Unknown' %>
+                      </span>
+                    </td>
+                    <td>
+                      <% if problem[:notes] && !problem[:notes].empty? %>
+                        <div style="max-width: 300px;">
+                          <div style="color: #6c757d; font-size: 0.75rem; margin-bottom: 4px;">Notes preview:</div>
+                          <div style="color: #495057; font-size: 0.875rem; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                            <%= problem[:notes].strip.gsub(/\n+/, ' ').truncate(120) %>
+                          </div>
+                        </div>
+                      <% else %>
+                        <span style="color: #adb5bd; font-size: 0.875rem;">No notes</span>
+                      <% end %>
+                    </td>
+                    <td>
+                      <a href="/problems/<%= problem[:id] %>" class="btn btn-primary" style="padding: 4px 8px; font-size: 0.75rem; text-decoration: none;">
+                        Edit Notes
+                      </a>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <div class="empty-state">
+              <h3>No solved problems found</h3>
+              <p>Click "Sync Data" to fetch your solved problems from LeetCode.</p>
             </div>
           <% end %>
         </div>
-      <% else %>
-        <div class="empty-state">
-          <h3>No solved problems found</h3>
-          <p>Click the sync button above to fetch your solved problems from LeetCode.</p>
-        </div>
-      <% end %>
       </div>
     </main>
   </div>

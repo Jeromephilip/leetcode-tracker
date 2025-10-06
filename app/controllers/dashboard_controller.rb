@@ -50,7 +50,7 @@ class DashboardController < ApplicationController
         end
 
         # Load recent submissions from cache/db instead of fetching from API
-        @recent_submissions = Submission.recent_for_user(@user.id, 10)
+        @recent_submissions = Submission.recent_for_user(@user.id, 20)
         Rails.logger.info "Loaded #{@recent_submissions.length} recent submissions from database"
       end
     rescue => e
