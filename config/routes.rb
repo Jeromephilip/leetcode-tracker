@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       post "leetcode/sync_profile", to: "leetcode_auth#sync_profile"
       post "leetcode/sync_submissions", to: "leetcode_auth#sync_submissions"
       get "leetcode/check_username/:username", to: "leetcode_auth#check_username_availability"
+      post "leetcode/refresh_session", to: "leetcode_auth#refresh_session"
+      get "leetcode/session_health", to: "leetcode_auth#session_health"
       post "problems/notes", to: "problems#notes"
     end
   end

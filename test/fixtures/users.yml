@@ -1,0 +1,18 @@
+# test/fixtures/users.yml
+one:
+  email: test@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  leetcode_username: testuser
+  leetcode_cookies: '{"LEETCODE_SESSION": "test_session_123"}'
+  leetcode_last_sync: <%= 2.hours.ago %>
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+
+two:
+  email: inactive@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  leetcode_username: inactiveuser
+  leetcode_cookies: '{"LEETCODE_SESSION": "expired_session_456"}'
+  leetcode_last_sync: <%= 1.week.ago %>
+  created_at: <%= 2.months.ago %>
+  updated_at: <%= 2.months.ago %>

@@ -72,12 +72,12 @@ async function checkWebAppLogin() {
       const webAppLinks = document.getElementById('webAppLinks');
       if (webAppStatus) {
         webAppStatus.style.display = 'block';
-        webAppStatus.textContent = '✅ Logged into web app';
+        webAppStatus.textContent = 'Logged into web app';
         webAppStatus.style.background = '#d4edda';
         webAppStatus.style.color = '#155724';
       }
       if (webAppLinks) {
-        webAppLinks.innerHTML = '<a href="http://localhost:3000/dashboard" target="_blank" style="color: #007bff; text-decoration: none; font-size: 12px;">📊 Go to Dashboard</a>';
+        webAppLinks.innerHTML = '<a href="http://localhost:3000/dashboard" target="_blank" style="color: #007bff; text-decoration: none; font-size: 12px;">Go to Dashboard</a>';
         webAppLinks.style.display = 'block';
       }
     } else {
@@ -85,7 +85,7 @@ async function checkWebAppLogin() {
       const webAppLinks = document.getElementById('webAppLinks');
       if (webAppStatus) {
         webAppStatus.style.display = 'block';
-        webAppStatus.textContent = '❌ Not logged into web app';
+        webAppStatus.textContent = 'Not logged into web app';
         webAppStatus.style.background = '#f8d7da';
         webAppStatus.style.color = '#721c24';
       }
@@ -99,7 +99,7 @@ async function checkWebAppLogin() {
     const webAppLinks = document.getElementById('webAppLinks');
     if (webAppStatus) {
       webAppStatus.style.display = 'block';
-      webAppStatus.textContent = '❌ Error checking login status';
+      webAppStatus.textContent = 'Error checking login status';
       webAppStatus.style.background = '#f8d7da';
       webAppStatus.style.color = '#721c24';
     }
@@ -160,7 +160,7 @@ async function linkAccount() {
       await loadUserStats();
     } else {
       if (response.status === 409 && data.error === 'LeetCode account already linked') {
-        const errorMessage = `❌ LeetCode Account Already Linked!\n\n` +
+        const errorMessage = `LeetCode Account Already Linked!\n\n` +
                            `The username "${data.leetcode_username}" is already linked to another account.\n\n` +
                            `Currently owned by: ${data.existing_user_email}\n\n` +
                            `If this is your account, please log in with that email instead.`;
@@ -272,11 +272,11 @@ async function checkUsernameAvailability(username) {
     
     if (response.ok) {
       if (data.available) {
-        return { available: true, message: `✅ Username "${username}" is available!` };
+        return { available: true, message: `Username "${username}" is available!` };
       } else {
         return { 
           available: false, 
-          message: `❌ Username "${username}" is already taken by ${data.existing_user.email}` 
+          message: `Username "${username}" is already taken by ${data.existing_user.email}` 
         };
       }
     } else {
