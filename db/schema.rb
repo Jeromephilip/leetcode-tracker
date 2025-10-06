@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_232349) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_06_003733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -50,6 +50,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_232349) do
     t.integer "leetcode_total_count"
     t.integer "leetcode_rank"
     t.text "leetcode_notes"
+    t.text "recent_submissions"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["leetcode_username"], name: "index_users_on_leetcode_username", unique: true, where: "(leetcode_username IS NOT NULL)"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
