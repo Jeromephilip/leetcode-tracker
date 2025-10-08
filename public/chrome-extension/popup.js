@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
   checkConnectionStatus();
   checkWebAppLogin();
   setupEventListeners();
+  checkAccountSwitch();
 });
 
 function setupEventListeners() {
@@ -181,9 +182,18 @@ async function linkAccount() {
 
 async function syncProfile() {
   try {
+    console.log('=== CHROME EXTENSION SYNC PROFILE STARTED ===');
+    console.log('User initiated profile sync from Chrome extension');
+    console.log('Timestamp:', new Date().toISOString());
+    console.log('API Base URL:', API_BASE_URL);
+    console.log('Auth token present:', !!authToken);
+    
     updateStatus('Syncing profile...', 'info');
     syncProfileBtn.disabled = true;
     
+    const startTime = Date.now();
+    
+    console.log('=== MAKING SYNC PROFILE REQUEST ===');
     const response = await fetch(`${API_BASE_URL}/api/v1/leetcode/sync_profile`, {
       method: 'POST',
       headers: {
@@ -192,18 +202,45 @@ async function syncProfile() {
       }
     });
     
+    const endTime = Date.now();
+    console.log('=== SYNC PROFILE RESPONSE RECEIVED ===');
+    console.log('Response time:', endTime - startTime, 'ms');
+    console.log('HTTP status:', response.status);
+    console.log('Response ok:', response.ok);
+    
     const data = await response.json();
     
     if (response.ok) {
+      console.log('=== SYNC PROFILE SUCCESS ===');
+      console.log('Profile synced successfully');
+      console.log('Updated stats:', data.leetcode_stats);
+      
       updateStatus('Profile synced successfully!', 'success');
       await loadUserStats();
     } else {
-      updateStatus(`Error: ${data.error}`, 'error');
+      console.log('=== SYNC PROFILE FAILED ===');
+      console.log('Sync failed with error:', data.error);
+      console.log('Requires relink:', data.requires_relink);
+      
+      if (data.requires_relink) {
+        console.log('=== SESSION EXPIRED IN EXTENSION ===');
+        console.log('User session has expired, needs to re-link');
+        updateStatus('Session expired. Please re-link your account.', 'error');
+      } else {
+        updateStatus(`Error: ${data.error}`, 'error');
+      }
     }
   } catch (error) {
-    console.error('Error syncing profile:', error);
+    console.error('=== CHROME EXTENSION SYNC PROFILE ERROR ===');
+    console.error('Network or parsing error:', error);
+    console.error('Error type:', error.name);
+    console.error('Error message:', error.message);
+    
     updateStatus('Failed to sync profile. Please try again.', 'error');
   } finally {
+    console.log('=== CHROME EXTENSION SYNC PROFILE COMPLETED ===');
+    console.log('Restoring button state');
+    
     syncProfileBtn.disabled = false;
   }
 }

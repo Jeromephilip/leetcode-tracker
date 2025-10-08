@@ -1,0 +1,60 @@
+# test/fixtures/submissions.yml
+one:
+  user: one
+  leetcode_id: "12345"
+  title: "Two Sum"
+  title_slug: "two-sum"
+  status: "Accepted"
+  language: "Python"
+  timestamp: <%= 1.day.ago.to_i %>
+  url: "https://leetcode.com/problems/two-sum/"
+  code: "def twoSum(nums, target):\n    pass"
+  submitted_at: <%= 1.day.ago %>
+
+two:
+  user: one
+  leetcode_id: "12346"
+  title: "Add Two Numbers"
+  title_slug: "add-two-numbers"
+  status: "Accepted"
+  language: "Java"
+  timestamp: <%= 2.days.ago.to_i %>
+  url: "https://leetcode.com/problems/add-two-numbers/"
+  code: "public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n    return null;\n}"
+  submitted_at: <%= 2.days.ago %>
+
+three:
+  user: one
+  leetcode_id: "12347"
+  title: "Longest Substring Without Repeating Characters"
+  title_slug: "longest-substring-without-repeating-characters"
+  status: "Accepted"
+  language: "Python"
+  timestamp: <%= 3.days.ago.to_i %>
+  url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/"
+  code: "def lengthOfLongestSubstring(s):\n    return 0"
+  submitted_at: <%= 3.days.ago %>
+
+four:
+  user: two
+  leetcode_id: "12348"
+  title: "Median of Two Sorted Arrays"
+  title_slug: "median-of-two-sorted-arrays"
+  status: "Accepted"
+  language: "C++"
+  timestamp: <%= 1.week.ago.to_i %>
+  url: "https://leetcode.com/problems/median-of-two-sorted-arrays/"
+  code: "double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {\n    return 0.0;\n}"
+  submitted_at: <%= 1.week.ago %>
+
+five:
+  user: one
+  leetcode_id: "12349"
+  title: "Wrong Answer Problem"
+  title_slug: "wrong-answer-problem"
+  status: "Wrong Answer"
+  language: "Python"
+  timestamp: <%= 1.hour.ago.to_i %>
+  url: "https://leetcode.com/problems/wrong-answer-problem/"
+  code: "def wrongSolution():\n    return False"
+  submitted_at: <%= 1.hour.ago %>

@@ -52,6 +52,16 @@ class DashboardController < ApplicationController
         # Load recent submissions from cache/db instead of fetching from API
         @recent_submissions = Submission.recent_for_user(@user.id, 20)
         Rails.logger.info "Loaded #{@recent_submissions.length} recent submissions from database"
+
+        # Initialize spaced repetition service and load review tasks
+        @spaced_repetition_service = SpacedRepetitionService.new(@user)
+        @todays_review_tasks = @spaced_repetition_service.todays_review_tasks
+        @review_stats = @spaced_repetition_service.review_stats
+
+        # Auto-create entries for new submissions (only if user has submissions)
+        if @recent_submissions.any?
+          @spaced_repetition_service.create_entries_from_recent_submissions
+        end
       end
     rescue => e
       Rails.logger.error "Error in dashboard controller: #{e.message}"
@@ -64,6 +74,8 @@ class DashboardController < ApplicationController
         total_active_days: 0
       }
       @recent_submissions = []
+      @todays_review_tasks = []
+      @review_stats = { total_problems: 0, mastered: 0, due_today: 0, overdue: 0, mastery_rate: 0 }
     end
   end
 

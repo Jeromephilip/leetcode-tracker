@@ -12,6 +12,9 @@ Rails.application.routes.draw do
       post "leetcode/refresh_session", to: "leetcode_auth#refresh_session"
       get "leetcode/session_health", to: "leetcode_auth#session_health"
       post "problems/notes", to: "problems#notes"
+      post "spaced_repetition/review", to: "spaced_repetition#review"
+      get "spaced_repetition/stats", to: "spaced_repetition#stats"
+      post "spaced_repetition/sync", to: "spaced_repetition#sync"
     end
   end
 

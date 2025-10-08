@@ -10,9 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_06_003733) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_08_002604) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "spaced_repetition_entries", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "problem_title", null: false
+    t.string "problem_slug", null: false
+    t.string "leetcode_id", null: false
+    t.datetime "first_solved_at", null: false
+    t.datetime "last_reviewed_at"
+    t.integer "review_count", default: 0
+    t.integer "difficulty_level", default: 1
+    t.float "ease_factor", default: 2.5
+    t.integer "interval_days", default: 1
+    t.datetime "next_review_at"
+    t.boolean "mastered", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "mastered"], name: "index_spaced_repetition_entries_on_user_id_and_mastered"
+    t.index ["user_id", "next_review_at"], name: "index_spaced_repetition_entries_on_user_id_and_next_review_at"
+    t.index ["user_id", "problem_slug"], name: "index_spaced_repetition_entries_on_user_id_and_problem_slug", unique: true
+    t.index ["user_id"], name: "index_spaced_repetition_entries_on_user_id"
+  end
 
   create_table "submissions", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -56,5 +77,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_003733) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "spaced_repetition_entries", "users"
   add_foreign_key "submissions", "users"
 end

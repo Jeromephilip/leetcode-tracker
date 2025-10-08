@@ -78,7 +78,6 @@ class Submission < ApplicationRecord
       }
 
       if submission.new_record?
-        # Convert timestamp to user's timezone (assuming UTC from LeetCode)
         attributes[:submitted_at] = Time.at(submission_data[:timestamp]).utc
       end
 

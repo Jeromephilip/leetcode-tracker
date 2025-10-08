@@ -397,6 +397,295 @@
       color: #333;
     }
 
+    /* Review Tasks Styles */
+    .review-tasks-container {
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .review-tasks-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .review-tasks-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    .review-tasks-container::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 4px;
+    }
+
+    .review-tasks-container::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    .review-task-card {
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .review-task-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-color: #6f42c1;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .task-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+    }
+
+    .task-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .difficulty-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .difficulty-1 { background: #d4edda; color: #155724; }
+    .difficulty-2 { background: #fff3cd; color: #856404; }
+    .difficulty-3 { background: #f8d7da; color: #721c24; }
+
+    .review-count {
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+
+    .task-details {
+      margin-bottom: 16px;
+    }
+
+    .interval-info {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .interval-label {
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+
+    .interval-value {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #6f42c1;
+    }
+
+    .overdue-warning {
+      color: #dc3545;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .review-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .review-btn {
+      background: #6f42c1;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .review-btn:hover {
+      background: #5a32a3;
+    }
+
+    .leetcode-link {
+      color: #6f42c1;
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .leetcode-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #e9ecef;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: #333;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6c757d;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .quality-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .quality-btn {
+      background: white;
+      border: 2px solid #e9ecef;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .quality-btn:hover {
+      border-color: #6f42c1;
+      background: #f8f9fa;
+      transform: translateY(-2px);
+    }
+
+    .quality-label {
+      font-size: 0.75rem;
+      color: #333;
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .quality-number {
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #6f42c1;
+    }
+
+    .review-stats {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .stat-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #e9ecef;
+      color: #495057;
+    }
+
+    .stat-badge.overdue {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    /* Completed State Styles */
+    .completed-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6c757d;
+    }
+
+    .completed-icon {
+      color: #28a745;
+      margin-bottom: 16px;
+    }
+
+    .completed-state h3 {
+      color: #28a745;
+      margin-bottom: 8px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .completed-state p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+
+    .completion-stats {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .stat-item {
+      background: #e9ecef;
+      color: #495057;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .main-content {
@@ -415,6 +704,46 @@
 
       .stats-grid {
         grid-template-columns: 1fr;
+      }
+
+      .task-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .review-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .quality-buttons {
+        gap: 4px;
+      }
+
+      .quality-btn {
+        width: 60px;
+        height: 60px;
+      }
+
+      .quality-label {
+        font-size: 0.65rem;
+      }
+
+      .quality-number {
+        font-size: 0.75rem;
+        bottom: -20px;
+      }
+
+      .completion-stats {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .review-tasks-container {
+        max-height: 300px;
+        padding: 15px;
       }
     }
   </style>
@@ -482,7 +811,93 @@
             <div class="stat-label">Problems Solved</div>
             <div class="stat-description">Total accepted solutions</div>
           </div>
+          
+          <% if @review_stats[:total_problems] > 0 %>
+            <div class="stat-card">
+              <div class="stat-number"><%= @review_stats[:mastered] %></div>
+              <div class="stat-label">Mastered</div>
+              <div class="stat-description"><%= @review_stats[:mastery_rate] %>% mastery rate</div>
+            </div>
+          <% end %>
         </div>
+
+        <!-- Today's Review Tasks -->
+        <% if @user.leetcode_cookies.present? %>
+          <div class="section">
+            <div class="section-header">
+              <h2 class="section-title">Today's Review Tasks</h2>
+              <div class="review-stats">
+                <% if @todays_review_tasks&.any? %>
+                  <span class="stat-badge"><%= @review_stats[:due_today] %> due</span>
+                  <% if @review_stats[:overdue] > 0 %>
+                    <span class="stat-badge overdue"><%= @review_stats[:overdue] %> overdue</span>
+                  <% end %>
+                <% end %>
+                <button class="btn btn-primary" onclick="syncSpacedRepetition()">Sync Problems</button>
+              </div>
+            </div>
+            
+            <% if @todays_review_tasks&.any? %>
+              <div class="review-tasks-container">
+                <% @todays_review_tasks.each do |task| %>
+                  <div class="review-task-card" data-entry-id="<%= task.id %>">
+                    <div class="task-header">
+                      <h3 class="task-title"><%= task.problem_title %></h3>
+                      <div class="task-meta">
+                        <span class="difficulty-badge difficulty-<%= task.difficulty_level %>">
+                          <%= task.difficulty_name %>
+                        </span>
+                        <span class="review-count">Review #<%= task.review_count + 1 %></span>
+                      </div>
+                    </div>
+                    
+                    <div class="task-details">
+                      <div class="interval-info">
+                        <span class="interval-label">Next interval:</span>
+                        <span class="interval-value"><%= task.interval_days %> days</span>
+                      </div>
+                      <% if task.overdue_days > 0 %>
+                        <div class="overdue-warning">
+                          <%= task.overdue_days %> days overdue
+                        </div>
+                      <% end %>
+                    </div>
+                    
+                    <div class="review-actions">
+                      <button class="review-btn" onclick="openReviewModal(<%= task.id %>)">
+                        Start Review
+                      </button>
+                      <a href="https://leetcode.com/problems/<%= task.problem_slug %>" 
+                         target="_blank" class="leetcode-link">
+                        View on LeetCode
+                      </a>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% elsif @review_stats[:total_problems] > 0 %>
+              <div class="completed-state">
+                <div class="completed-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3l8-8"></path>
+                    <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9s4.03-9 9-9c2.12 0 4.07.74 5.62 1.97"></path>
+                  </svg>
+                </div>
+                <h3>All caught up!</h3>
+                <p>You've completed all your review tasks for today. Great job!</p>
+                <div class="completion-stats">
+                  <span class="stat-item"><%= @review_stats[:total_problems] %> problems in system</span>
+                  <span class="stat-item"><%= @review_stats[:mastered] %> mastered</span>
+                </div>
+              </div>
+            <% else %>
+              <div class="empty-state">
+                <h3>No problems synced yet</h3>
+                <p>Click "Sync Problems" to add your solved problems to spaced repetition review.</p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
 
         <!-- Recent Submissions Table -->
         <div class="section">
@@ -533,6 +948,40 @@
         </div>
       <% end %>
     </main>
+  </div>
+
+  <!-- Review Modal -->
+  <div id="reviewModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>How well could you solve this problem?</h3>
+        <button class="close-modal" onclick="closeReviewModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="quality-buttons">
+          <button class="quality-btn" data-quality="1" onclick="submitReview(1)">
+            <span class="quality-label">Could not solve</span>
+            <span class="quality-number">1</span>
+          </button>
+          <button class="quality-btn" data-quality="2" onclick="submitReview(2)">
+            <span class="quality-label">Solved with major hints</span>
+            <span class="quality-number">2</span>
+          </button>
+          <button class="quality-btn" data-quality="3" onclick="submitReview(3)">
+            <span class="quality-label">Solved with minor hints</span>
+            <span class="quality-number">3</span>
+          </button>
+          <button class="quality-btn" data-quality="4" onclick="submitReview(4)">
+            <span class="quality-label">Solved independently</span>
+            <span class="quality-number">4</span>
+          </button>
+          <button class="quality-btn" data-quality="5" onclick="submitReview(5)">
+            <span class="quality-label">Solved easily</span>
+            <span class="quality-number">5</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
   
   <script>
@@ -607,6 +1056,114 @@
         }
       }, 3000);
     }
+
+    // Spaced Repetition Functions
+    let currentReviewEntryId = null;
+
+    function openReviewModal(entryId) {
+      currentReviewEntryId = entryId;
+      document.getElementById('reviewModal').style.display = 'flex';
+    }
+
+    function closeReviewModal() {
+      document.getElementById('reviewModal').style.display = 'none';
+      currentReviewEntryId = null;
+    }
+
+    function submitReview(qualityScore) {
+      if (!currentReviewEntryId) return;
+      
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      
+      fetch('/api/v1/spaced_repetition/review', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({
+          entry_id: currentReviewEntryId,
+          quality_score: qualityScore
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showMessage('Review submitted successfully!', 'success');
+          // Remove the reviewed task from the UI
+          const taskCard = document.querySelector(`[data-entry-id="${currentReviewEntryId}"]`);
+          if (taskCard) {
+            taskCard.style.opacity = '0.5';
+            taskCard.style.pointerEvents = 'none';
+            // Update the review count
+            const reviewCountElement = taskCard.querySelector('.review-count');
+            if (reviewCountElement) {
+              reviewCountElement.textContent = `Review #${data.review_count + 1}`;
+            }
+          }
+          closeReviewModal();
+          
+          // Refresh the page after a short delay to update stats
+          setTimeout(() => {
+            location.reload();
+          }, 1500);
+        } else {
+          showMessage(data.error || 'Failed to submit review', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Review error:', error);
+        showMessage('An error occurred while submitting review', 'error');
+      });
+    }
+
+    function syncSpacedRepetition() {
+      const syncButton = document.querySelector('[onclick="syncSpacedRepetition()"]');
+      const originalText = syncButton.textContent;
+      
+      // Show loading state
+      syncButton.disabled = true;
+      syncButton.textContent = 'Syncing...';
+      
+      // Get CSRF token
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      
+      fetch('/api/v1/spaced_repetition/sync', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        credentials: 'same-origin'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showMessage(`Synced ${data.created_count} new problems for spaced repetition!`, 'success');
+          // Refresh the page to show new tasks
+          setTimeout(() => {
+            location.reload();
+          }, 1500);
+        } else {
+          showMessage(data.error || 'Failed to sync problems', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Sync error:', error);
+        showMessage('An error occurred while syncing. Please try again.', 'error');
+      })
+      .finally(() => {
+        syncButton.disabled = false;
+        syncButton.textContent = originalText;
+      });
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('reviewModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeReviewModal();
+      }
+    });
   </script>
 </body>
 </html>

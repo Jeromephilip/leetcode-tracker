@@ -3,6 +3,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :submissions, dependent: :destroy
+  has_many :spaced_repetition_entries, dependent: :destroy
 
   validates :leetcode_username, uniqueness: { scope: :id, allow_blank: true }
   validate :leetcode_username_not_already_taken, if: :leetcode_username_changed?
@@ -43,9 +44,7 @@ class User < ApplicationRecord
     activity_level = determine_activity_level
     base_interval = base_intervals[activity_level]
 
-    # Adjust based on failure history
     if has_expired_sessions?
-      # User has had expired sessions before, refresh more frequently
       base_interval = base_interval / 2
     end
 
