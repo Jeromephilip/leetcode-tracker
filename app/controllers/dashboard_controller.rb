@@ -56,6 +56,7 @@ class DashboardController < ApplicationController
         # Initialize spaced repetition service and load review tasks
         @spaced_repetition_service = SpacedRepetitionService.new(@user)
         @todays_review_tasks = @spaced_repetition_service.todays_review_tasks
+        @tomorrows_review_tasks = @spaced_repetition_service.tomorrows_review_tasks
         @review_stats = @spaced_repetition_service.review_stats
 
         # Auto-create entries for new submissions (only if user has submissions)
@@ -75,6 +76,7 @@ class DashboardController < ApplicationController
       }
       @recent_submissions = []
       @todays_review_tasks = []
+      @tomorrows_review_tasks = []
       @review_stats = { total_problems: 0, mastered: 0, due_today: 0, overdue: 0, mastery_rate: 0 }
     end
   end

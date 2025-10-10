@@ -86,13 +86,11 @@ class LeetcodeService
   end
 
   def fetch_recent_submissions
-    # Add a small delay to avoid rate limiting
     sleep(0.5) if @last_request_time && (Time.current - @last_request_time) < 1.0
 
     response = get("/api/submissions/")
     @last_request_time = Time.current
 
-    # Handle 403 Forbidden - session expired or rate limited
     if response.code == 403
       Rails.logger.warn "LeetCode submissions API returned 403 - session may be expired or rate limited"
       return []
@@ -104,7 +102,6 @@ class LeetcodeService
     Rails.logger.info "Fetched #{submissions.length} submissions"
 
     submissions.first(20).map do |submission|
-      # Handle different possible data structures
       title = submission["title"] || submission["question__title"] || "Unknown"
       title_slug = submission["title_slug"] || submission["question__title_slug"] || title.parameterize
 
@@ -182,25 +179,21 @@ class LeetcodeService
   def detect_algorithms(title, title_slug)
     algorithms = []
 
-    # Convert to lowercase for easier matching
     title_lower = title.downcase
     slug_lower = title_slug.downcase
 
-    # Graph algorithms
     if title_lower.include?("graph") || title_lower.include?("tree") || title_lower.include?("node") ||
        slug_lower.include?("graph") || slug_lower.include?("tree") || slug_lower.include?("node") ||
        title_lower.include?("bfs") || title_lower.include?("dfs") || title_lower.include?("traversal")
       algorithms << "Graph/Tree"
     end
 
-    # Dynamic Programming
     if title_lower.include?("dp") || title_lower.include?("dynamic") || title_lower.include?("memoization") ||
        title_lower.include?("subsequence") || title_lower.include?("substring") || title_lower.include?("palindrome") ||
        title_lower.include?("coin") || title_lower.include?("knapsack") || title_lower.include?("climbing")
       algorithms << "Dynamic Programming"
     end
 
-    # Two Pointers
     if title_lower.include?("two pointer") || title_lower.include?("2 pointer") || title_lower.include?("fast slow") ||
        title_lower.include?("slow fast") || title_lower.include?("hare tortoise") || title_lower.include?("cycle") ||
        title_lower.include?("linked list") || title_lower.include?("array") && (title_lower.include?("sum") || title_lower.include?("target")) ||
@@ -208,19 +201,16 @@ class LeetcodeService
       algorithms << "Two Pointers"
     end
 
-    # Binary Search
     if title_lower.include?("binary search") || title_lower.include?("search") && (title_lower.include?("sorted") || title_lower.include?("array")) ||
        slug_lower.include?("search") || title_lower.include?("median") || title_lower.include?("kth")
       algorithms << "Binary Search"
     end
 
-    # Sliding Window
     if title_lower.include?("sliding window") || title_lower.include?("window") || title_lower.include?("subarray") ||
        title_lower.include?("substring") || title_lower.include?("consecutive") || title_lower.include?("k")
       algorithms << "Sliding Window"
     end
 
-    # Stack/Queue
     if title_lower.include?("stack") || title_lower.include?("queue") || title_lower.include?("monotonic") ||
        title_lower.include?("bracket") || title_lower.include?("parentheses") || title_lower.include?("valid")
       algorithms << "Stack/Queue"
@@ -232,13 +222,11 @@ class LeetcodeService
       algorithms << "Greedy"
     end
 
-    # Backtracking
     if title_lower.include?("backtrack") || title_lower.include?("combination") || title_lower.include?("permutation") ||
        title_lower.include?("n-queens") || title_lower.include?("sudoku") || title_lower.include?("generate")
       algorithms << "Backtracking"
     end
 
-    # Hash Table
     if title_lower.include?("hash") || title_lower.include?("frequency") || title_lower.include?("count") ||
        title_lower.include?("duplicate") || title_lower.include?("unique") || title_lower.include?("anagram") ||
        title_lower.include?("two sum") || title_lower.include?("3sum") || title_lower.include?("4sum") ||
@@ -246,26 +234,22 @@ class LeetcodeService
       algorithms << "Hash Table"
     end
 
-    # Sort
     if title_lower.include?("sort") || title_lower.include?("merge") || title_lower.include?("quick") ||
        title_lower.include?("bubble") || title_lower.include?("insertion") || title_lower.include?("selection")
       algorithms << "Sort"
     end
 
-    # Math
     if title_lower.include?("math") || title_lower.include?("prime") || title_lower.include?("factorial") ||
        title_lower.include?("gcd") || title_lower.include?("lcm") || title_lower.include?("modulo") ||
        title_lower.include?("power") || title_lower.include?("square") || title_lower.include?("root")
       algorithms << "Math"
     end
 
-    # Bit Manipulation
     if title_lower.include?("bit") || title_lower.include?("xor") || title_lower.include?("and") ||
        title_lower.include?("or") || title_lower.include?("shift") || title_lower.include?("power of 2")
       algorithms << "Bit Manipulation"
     end
 
-    # If no specific algorithms detected, add a general category
     algorithms << "General" if algorithms.empty?
 
     algorithms

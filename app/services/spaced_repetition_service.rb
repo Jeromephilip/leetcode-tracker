@@ -11,6 +11,17 @@ class SpacedRepetitionService
          .limit(limit)
   end
 
+  def tomorrows_review_tasks(limit = 10)
+    tomorrow_start = 1.day.from_now.beginning_of_day
+    tomorrow_end = 1.day.from_now.end_of_day
+
+    @user.spaced_repetition_entries
+         .not_mastered
+         .where(next_review_at: tomorrow_start..tomorrow_end)
+         .order(:next_review_at)
+         .limit(limit)
+  end
+
   def create_entries_from_recent_submissions
     recent_submissions = @user.submissions
                              .accepted
