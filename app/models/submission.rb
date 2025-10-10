@@ -36,8 +36,24 @@ class Submission < ApplicationRecord
     Rails.cache.delete_matched("user:#{user_id}:submissions:*")
   end
 
+  # Update user's solved count when submissions change
+  def update_user_solved_count
+    return unless saved_change_to_status? || saved_change_to_user_id?
+
+    # Count unique accepted problems for this user
+    accepted_problems = user.submissions
+                           .accepted
+                           .distinct
+                           .count(:title_slug)
+
+    user.update_column(:leetcode_solved_count, accepted_problems)
+    Rails.logger.info "Updated solved count for user #{user_id}: #{accepted_problems}"
+  end
+
   after_save :clear_user_cache
+  after_save :update_user_solved_count
   after_destroy :clear_user_cache
+  after_destroy :update_user_solved_count
 
   # Convert to hash format for API responses
   def to_api_hash
@@ -85,6 +101,10 @@ class Submission < ApplicationRecord
 
       if submission.save
         synced_submissions << submission
+        # Update solved count if this is a new accepted submission
+        if submission.previously_new_record? && submission.status == "Accepted"
+          submission.update_user_solved_count
+        end
       else
         Rails.logger.warn "Failed to save submission #{submission_data[:id]}: #{submission.errors.full_messages.join(', ')}"
       end

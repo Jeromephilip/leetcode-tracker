@@ -452,7 +452,7 @@
     /* Sections Grid for horizontal layout */
     .sections-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 32px;
       align-items: start;
       margin-bottom: 30px;
@@ -872,7 +872,6 @@
                       <span class="stat-badge overdue"><%= @review_stats[:overdue] %> overdue</span>
                     <% end %>
                   <% end %>
-                  <button class="btn btn-primary" onclick="syncSpacedRepetition()">Sync Problems</button>
                 </div>
               </div>
               
@@ -937,51 +936,6 @@
               <% end %>
             </div>
 
-            <!-- Tomorrow's Review Tasks -->
-            <% if @tomorrows_review_tasks&.any? %>
-              <div class="section">
-                <div class="section-header">
-                  <h2 class="section-title">Tomorrow's Tasks</h2>
-                  <div class="review-stats">
-                    <span class="stat-badge tomorrow"><%= @tomorrows_review_tasks.count %> scheduled</span>
-                  </div>
-                </div>
-                
-                <div class="review-tasks-container">
-                  <% @tomorrows_review_tasks.each do |task| %>
-                    <div class="review-task-card">
-                      <div class="task-header">
-                        <h3 class="task-title"><%= task.problem_title %></h3>
-                        <div class="task-meta">
-                          <span class="difficulty-badge difficulty-<%= task.difficulty_level %>">
-                            <%= task.difficulty_name %>
-                          </span>
-                          <span class="review-count">Review #<%= task.review_count + 1 %></span>
-                        </div>
-                      </div>
-                      
-                      <div class="task-details">
-                        <div class="interval-info">
-                          <span class="interval-label">Next interval:</span>
-                          <span class="interval-value"><%= task.interval_days %> days</span>
-                        </div>
-                        <div class="interval-info">
-                          <span class="interval-label">Scheduled for:</span>
-                          <span class="interval-value"><%= task.next_review_at.strftime("%B %d, %Y") %></span>
-                        </div>
-                      </div>
-                      
-                      <div class="review-actions">
-                        <a href="https://leetcode.com/problems/<%= task.problem_slug %>" 
-                           target="_blank" class="leetcode-link">
-                          View on LeetCode
-                        </a>
-                      </div>
-                    </div>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
           </div>
         <% end %>
 
@@ -989,7 +943,7 @@
         <div class="section">
           <div class="section-header">
             <h2 class="section-title">Recent Submissions</h2>
-            <button class="btn btn-primary" onclick="syncSubmissions()">Sync Data</button>
+            <button id="sync-data-btn" class="btn btn-primary" onclick="syncSubmissions()">Sync Data</button>
           </div>
           
           <div class="table-container">
@@ -1072,7 +1026,7 @@
   
   <script>
     function syncSubmissions() {
-      const syncButton = document.querySelector('.btn-primary');
+      const syncButton = document.getElementById('sync-data-btn');
       const originalText = syncButton.textContent;
       
       // Show loading state
@@ -1204,7 +1158,7 @@
     }
 
     function syncSpacedRepetition() {
-      const syncButton = document.querySelector('[onclick="syncSpacedRepetition()"]');
+      const syncButton = document.getElementById('sync-problems-btn');
       const originalText = syncButton.textContent;
       
       // Show loading state

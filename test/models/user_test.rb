@@ -39,4 +39,78 @@ class UserTest < ActiveSupport::TestCase
     assert_not User.leetcode_username_available?("taken_username")
     assert User.leetcode_username_available?("available_username")
   end
+
+  test "solved count updates when submissions are created" do
+    user = User.create!(
+      email: "solved_count_test@example.com",
+      password: "password123"
+    )
+
+    # Initially no solved count
+    assert_nil user.leetcode_solved_count
+
+    # Create an accepted submission
+    submission1 = Submission.create!(
+      user: user,
+      leetcode_id: "1",
+      title: "Two Sum",
+      title_slug: "two-sum",
+      status: "Accepted",
+      language: "python",
+      timestamp: Time.current.to_i,
+      url: "https://leetcode.com/problems/two-sum",
+      submitted_at: Time.current
+    )
+
+    user.reload
+    assert_equal 1, user.leetcode_solved_count
+
+    # Create another accepted submission for different problem
+    submission2 = Submission.create!(
+      user: user,
+      leetcode_id: "2",
+      title: "Add Two Numbers",
+      title_slug: "add-two-numbers",
+      status: "Accepted",
+      language: "python",
+      timestamp: Time.current.to_i,
+      url: "https://leetcode.com/problems/add-two-numbers",
+      submitted_at: Time.current
+    )
+
+    user.reload
+    assert_equal 2, user.leetcode_solved_count
+
+    # Create a rejected submission - should not affect count
+    submission3 = Submission.create!(
+      user: user,
+      leetcode_id: "3",
+      title: "Longest Substring",
+      title_slug: "longest-substring",
+      status: "Wrong Answer",
+      language: "python",
+      timestamp: Time.current.to_i,
+      url: "https://leetcode.com/problems/longest-substring",
+      submitted_at: Time.current
+    )
+
+    user.reload
+    assert_equal 2, user.leetcode_solved_count
+
+    # Create another accepted submission for same problem - should not increase count
+    submission4 = Submission.create!(
+      user: user,
+      leetcode_id: "4",
+      title: "Two Sum",
+      title_slug: "two-sum",
+      status: "Accepted",
+      language: "java",
+      timestamp: Time.current.to_i,
+      url: "https://leetcode.com/problems/two-sum",
+      submitted_at: Time.current
+    )
+
+    user.reload
+    assert_equal 2, user.leetcode_solved_count
+  end
 end
